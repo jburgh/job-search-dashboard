@@ -113,6 +113,7 @@ export const PerformanceUtil = {
    */
   throttle(fn, interval = 300) {
     let lastCallTime = 0;
+    const self = this;
 
     return function throttled(...args) {
       const now = Date.now();
@@ -121,7 +122,7 @@ export const PerformanceUtil = {
         lastCallTime = now;
         return fn.apply(this, args);
       }
-      this.metrics.throttledCalls++;
+      self.metrics.throttledCalls++;
     };
   },
 
