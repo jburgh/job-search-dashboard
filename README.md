@@ -4,29 +4,41 @@ A professional, interactive dashboard for tracking job applications, managing pi
 
 ## Features
 
-- **Real-time metrics**: Total applications, callback rate, interview rate, and active pipeline
-- **Visual analytics**: Multi-line charts for applications and response activity
-- **Pipeline funnel**: Track jobs through recruitment stages
-- **Company tracking**: Monitor applications by company with response rates
-- **Closure analysis**: Understand why applications are closed
+- **Job tracking**: Status, priority, progression stages, and close reasons
+- **Company management**: Categories, fit level, bulk actions, hide/unhide, and quick filters
+- **Analytics dashboard**: Key metrics, trends, and funnel visualization
+- **Import/export**: JSON backup import/export and CSV export for jobs
+- **Search & filters**: Multi-select filters, date ranges, and sortable tables
 - **Light/Dark theme**: Toggle between themes for comfortable viewing
 - **Responsive design**: Works on desktop and tablet devices
 
 ## Technology Stack
 
-- **React 18** - UI framework
+- **React 18** - UI framework with functional components and hooks
+- **Vite 5** - Fast build tool and dev server
 - **Chart.js 4.4.1** - Data visualization
-- **Babel** - JSX compilation
+- **ES Modules** - Modern JavaScript module system
 - **Responsive CSS** - Custom styling with CSS variables
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (optional - runs entirely in the browser)
+Run entirely in the browser:
+
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 
-### Installation
+Optional, for local installations:
+
+- Node.js 18+
+- npm or yarn
+
+### Hosted version (GitHub Pages)
+
+Open: https://jburgh.github.io/job-search-dashboard/
+
+
+### Local installation
 
 1. Clone the repository:
 ```bash
@@ -34,39 +46,107 @@ git clone https://github.com/jburgh/job-search-dashboard.git
 cd job-search-dashboard
 ```
 
-2. Open in your browser:
+2. Install dependencies:
 ```bash
-open index.html
-# or simply double-click index.html in Finder
+npm install
 ```
 
-### Using with a local server (recommended)
-
-For the best experience, serve the app locally:
-
+3. Start the development server:
 ```bash
-# Using Python 3
-python -m http.server 8000
-
-# Using Python 2
-python -m SimpleHTTPServer 8000
-
-# Using Node.js (if you have http-server installed)
-npx http-server
+npm run dev
 ```
 
-Then visit `http://localhost:8000` in your browser.
+4. Open http://localhost:3000 in your browser
+
+### Build for Production
+
+```bash
+npm run build
+npm run preview  # Preview the production build
+```
 
 ## Data Storage
 
-Job data is stored in your browser's localStorage. Your data persists across sessions but is only stored locally on this device.
+All data (jobs, companies, categories, hidden companies, and settings) is stored in your browser's localStorage. Data persists across sessions but is only stored locally on this device. Use JSON backups for migration or recovery.
+
+
+## Project Structure
+
+```
+src/
+├── main.jsx                 # Vite entry point
+├── App.jsx                  # Main application component
+├── components/
+│   ├── charts/              # Chart components (Chart.js wrappers)
+│   │   ├── ChartCard.jsx
+│   │   ├── LineChartComponent.jsx
+│   │   ├── DualLineChartComponent.jsx
+│   │   ├── TripleLineChartComponent.jsx
+│   │   ├── BarChartComponent.jsx
+│   │   ├── PieChartComponent.jsx
+│   │   ├── FunnelChartComponent.jsx
+│   │   ├── GroupedBarChartComponent.jsx
+│   │   └── index.js
+│   ├── common/              # Shared UI components
+│   │   ├── StatusBadge.jsx
+│   │   ├── PriorityBadge.jsx
+│   │   ├── ErrorBoundary.jsx
+│   │   ├── PerformanceMonitor.jsx
+│   │   └── index.js
+│   ├── dashboard/           # Analytics dashboard components
+│   │   ├── AnalyticsDashboard.jsx
+│   │   ├── KeyMetricsGrid.jsx
+│   │   ├── InsightsPanel.jsx
+│   │   ├── generateInsights.js
+│   │   └── index.js
+│   ├── layout/              # Layout components
+│   │   ├── Header.jsx
+│   │   ├── Footer.jsx
+│   │   └── index.js
+│   ├── modals/              # Modal dialogs
+│   │   ├── JobModal.jsx
+│   │   ├── ImportModal.jsx
+│   │   ├── CompanyModal.jsx
+│   │   └── index.js
+│   ├── pages/               # Primary screens
+│   │   ├── Companies.jsx
+│   │   ├── JobsTable.jsx
+│   │   ├── Stats.jsx
+│   │   └── index.js
+│   └── index.js             # Barrel export
+├── constants/               # Application constants
+│   ├── appConfig.js
+│   ├── jobStatuses.js
+│   ├── closeReasons.js
+│   ├── progressionStages.js
+│   ├── priorities.js
+│   ├── fitLevels.js
+│   └── index.js
+├── utils/                   # Utility modules
+│   ├── logger.js            # Structured logging
+│   ├── performance.js       # Caching, debouncing, metrics
+│   ├── security.js          # Validation, sanitization
+│   ├── storage.js           # localStorage operations
+│   ├── ui.js                # UI helpers
+│   ├── fitLevel.js          # Fit level utilities
+│   ├── analytics/           # Analytics calculations
+│   │   ├── dateUtils.js
+│   │   ├── coreMetrics.js
+│   │   ├── timeBasedAnalytics.js
+│   │   ├── companyAnalytics.js
+│   │   └── index.js
+│   └── index.js
+└── styles/
+    └── main.css             # Application styles
+```
 
 ## Color Scheme
 
-- **Primary Blue**: #6b8aff
-- **Purple**: #8b5cf6
-- **Amber**: #f59e0b
-- **Green**: #10b981
+- **Primary Blue**: #2563eb
+- **Secondary Blue**: #3b82f6
+- **Accent Hover**: #1d4ed8
+- **Success**: #10b981
+- **Warning**: #f59e0b
 
 ## Browser Support
 
