@@ -129,18 +129,18 @@ export const getHotApplicationPeriods = (jobs) => {
 export const getHotResponsePeriods = (jobs) => {
   const monthlyResponses = getResponseRateByMonth(jobs);
 
-  const totalApps = monthlyResponses.reduce((sum, item) => sum + item.total, 0);
+  const totalApps = monthlyResponses.reduce((sum, item) => sum + item.followUps, 0);
   const totalResponses = monthlyResponses.reduce((sum, item) => sum + item.responded, 0);
   const overallAverage = totalApps > 0 ? (totalResponses / totalApps) * 100 : 0;
 
   const hotThreshold = overallAverage * APP_CONFIG.HOT_PERIOD_MULTIPLIER;
 
   const hotPeriods = monthlyResponses
-    .filter(item => item.percentage >= hotThreshold && item.total >= 3)
+    .filter(item => item.responsePercentage >= hotThreshold && item.followUps >= 3)
     .map(item => ({
       period: item.label,
-      responseRate: item.percentage,
-      applications: item.total,
+      responseRate: item.responsePercentage,
+      applications: item.followUps,
       responses: item.responded
     }));
 
