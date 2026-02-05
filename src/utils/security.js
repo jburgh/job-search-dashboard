@@ -52,11 +52,6 @@ export const SecurityUtil = {
         return null;
       }
 
-      if (urlObj.protocol === 'javascript:' || urlObj.protocol === 'data:') {
-        console.warn('Blocked dangerous URL protocol');
-        return null;
-      }
-
       return urlObj.href;
     } catch (e) {
       console.warn('Invalid URL format:', url);
