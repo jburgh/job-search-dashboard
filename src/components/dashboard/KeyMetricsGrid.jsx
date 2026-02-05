@@ -2,8 +2,12 @@ import React from 'react';
 
 /**
  * Grid of key metrics cards for the dashboard
+ * @param {object} metrics - Filtered metrics based on time range
+ * @param {object} constantMetrics - Unfiltered metrics (for pipeline, this week, this month)
  */
-const KeyMetricsGrid = ({ metrics }) => {
+const KeyMetricsGrid = ({ metrics, constantMetrics }) => {
+  // Use constantMetrics for values that should not change with time filter
+  const constant = constantMetrics || metrics;
   return (
     <div className="metrics-grid" style={{
       display: 'grid',
@@ -27,7 +31,7 @@ const KeyMetricsGrid = ({ metrics }) => {
           fontSize: '0.8rem',
           color: 'var(--text-tertiary)'
         }}>
-          {metrics.byTimeWindow.thisMonth} this month
+          {constant.byTimeWindow.thisMonth} this month
         </div>
       </div>
 
@@ -82,12 +86,12 @@ const KeyMetricsGrid = ({ metrics }) => {
           fontWeight: 'bold',
           color: 'var(--text-primary)',
           marginBottom: '0.25rem'
-        }}>{metrics.pipeline.total}</div>
+        }}>{constant.pipeline.total}</div>
         <div className="stat-detail" style={{
           fontSize: '0.8rem',
           color: 'var(--text-tertiary)'
         }}>
-          {metrics.pipeline.byStatus.Applied} idle · {metrics.pipeline.byStatus["In Progress"]} in progress
+          {constant.pipeline.byStatus.Applied} idle · {constant.pipeline.byStatus["In Progress"]} in progress
         </div>
       </div>
 
@@ -122,7 +126,7 @@ const KeyMetricsGrid = ({ metrics }) => {
           fontWeight: 'bold',
           color: 'var(--text-primary)',
           marginBottom: '0.25rem'
-        }}>{metrics.byTimeWindow.thisWeek}</div>
+        }}>{constant.byTimeWindow.thisWeek}</div>
         <div className="stat-detail" style={{
           fontSize: '0.8rem',
           color: 'var(--text-tertiary)'

@@ -18,104 +18,77 @@ import { generateInsights } from './generateInsights';
  */
 const AnalyticsDashboard = ({ jobs }) => {
   const [timeRange, setTimeRange] = useState('all');
-  const [customStart, setCustomStart] = useState('');
-  const [customEnd, setCustomEnd] = useState('');
 
-  // Helper function to filter data by time range
-  const filterDataByTimeRange = (data, range) => {
+  // Calculate date range boundaries
+  const dateRange = useMemo(() => {
+    if (timeRange === 'all') return { startDateStr: null, endDateStr: null, startMonth: null, endMonth: null };
+
     const now = new Date();
-    let startDate = null;
-    let endDate = null;
+    let startDateStr = null;
+    let endDateStr = null;
 
-    switch (range) {
+    // Helper to format date as YYYY-MM-DD string
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    switch (timeRange) {
       case 'past30':
-        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        startDateStr = formatDate(new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000));
+        break;
+      case 'past60':
+        startDateStr = formatDate(new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000));
+        break;
+      case 'past90':
+        startDateStr = formatDate(new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000));
         break;
       case 'past12months':
-        startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+        startDateStr = formatDate(new Date(now.getFullYear() - 1, now.getMonth(), now.getDate()));
         break;
       case 'thisYear':
-        startDate = new Date(now.getFullYear(), 0, 1);
+        startDateStr = `${now.getFullYear()}-01-01`;
         break;
       case 'lastYear':
-        startDate = new Date(now.getFullYear() - 1, 0, 1);
-        endDate = new Date(now.getFullYear() - 1, 11, 31, 23, 59, 59);
+        startDateStr = `${now.getFullYear() - 1}-01-01`;
+        endDateStr = `${now.getFullYear() - 1}-12-31`;
         break;
-      case 'custom':
-        if (customStart) startDate = new Date(customStart);
-        break;
-      case 'all':
       default:
-        return data;
+        return { startDateStr: null, endDateStr: null, startMonth: null, endMonth: null };
     }
 
-    if (!startDate) return data;
+    // Extract YYYY-MM for month filtering
+    const startMonth = startDateStr ? startDateStr.substring(0, 7) : null;
+    const endMonth = endDateStr ? endDateStr.substring(0, 7) : null;
 
-    return data.filter(item => {
-      // Parse label like "Jan 2025" or "January 2025"
-      const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-      const labelLower = item.label.toLowerCase();
-      const yearMatch = item.label.match(/\d{4}/);
-      const year = yearMatch ? parseInt(yearMatch[0]) : null;
+    return { startDateStr, endDateStr, startMonth, endMonth };
+  }, [timeRange]);
 
-      let month = null;
-      for (let i = 0; i < monthNames.length; i++) {
-        if (labelLower.includes(monthNames[i])) {
-          month = i;
-          break;
-        }
-      }
+  // Filter jobs by date range
+  const filteredJobs = useMemo(() => {
+    if (timeRange === 'all') return jobs;
 
-      if (!year || month === null) return true;
-      const itemDate = new Date(year, month, 1);
-      if (itemDate < startDate) return false;
-      if (endDate && itemDate > endDate) return false;
+    const { startDateStr, endDateStr } = dateRange;
+
+    return jobs.filter(job => {
+      if (!job.dateApplied) return false;
+      const jobDateStr = job.dateApplied; // Already in YYYY-MM-DD format
+      if (startDateStr && jobDateStr < startDateStr) return false;
+      if (endDateStr && jobDateStr > endDateStr) return false;
       return true;
     });
-  };
+  }, [jobs, timeRange, dateRange]);
 
-  // Check if filtered data spans less than 1 month for daily granularity
-  const shouldUseDailyData = (data) => {
-    // Use prominent points for sparse data (3 or fewer data points)
-    if (data.length <= 3) return true;
-
-    const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-    const parseMonthYear = (label) => {
-      const labelLower = label.toLowerCase();
-      const yearMatch = label.match(/\d{4}/);
-      const year = yearMatch ? parseInt(yearMatch[0]) : null;
-
-      let month = null;
-      for (let i = 0; i < monthNames.length; i++) {
-        if (labelLower.includes(monthNames[i])) {
-          month = i;
-          break;
-        }
-      }
-      return { year, month };
-    };
-
-    const first = parseMonthYear(data[0].label);
-    const last = parseMonthYear(data[data.length - 1].label);
-
-    if (!first.year || first.month === null || !last.year || last.month === null) return false;
-
-    const firstDate = new Date(first.year, first.month, 1);
-    const lastDate = new Date(last.year, last.month, 1);
-    const diffTime = Math.abs(lastDate - firstDate);
-    const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30));
-
-    return diffMonths < 1;
-  };
-
-  // Calculate all metrics
+  // Calculate metrics using filtered jobs
   const { overview, timeData, companyData, insights } = useMemo(() => {
-    const overview = analytics.getJobSearchOverview(jobs);
-    const timeData = analytics.getTimeBasedAnalytics(jobs);
-    const companyData = analytics.getCompanyPriorityAnalytics(jobs);
+    const overview = analytics.getJobSearchOverview(filteredJobs);
+    const timeData = analytics.getTimeBasedAnalytics(filteredJobs);
+    const companyData = analytics.getCompanyPriorityAnalytics(filteredJobs);
     const insights = generateInsights(overview, timeData, companyData);
 
     return { overview, timeData, companyData, insights };
+  }, [filteredJobs]);
+
+  // Calculate constant metrics from unfiltered jobs (for pipeline, this week, this month)
+  const constantOverview = useMemo(() => {
+    return analytics.getJobSearchOverview(jobs);
   }, [jobs]);
 
   // Prepare chart data
@@ -135,7 +108,7 @@ const AnalyticsDashboard = ({ jobs }) => {
       value: count
     }));
 
-  const progressionChartData = analytics.getProgressionBreakdownForResponded(jobs);
+  const progressionChartData = analytics.getProgressionBreakdownForResponded(filteredJobs);
 
   // Combine monthly applications and response activity into a single dataset
   const appsByMonth = {};
@@ -148,7 +121,14 @@ const AnalyticsDashboard = ({ jobs }) => {
     respByMonth[item.month] = { label: item.label, followUps: item.followUps || 0, responded: item.responded || 0 };
   });
 
-  const monthKeys = Array.from(new Set([...Object.keys(appsByMonth), ...Object.keys(respByMonth)])).sort();
+  // Filter month keys to only include months within the selected date range
+  const monthKeys = Array.from(new Set([...Object.keys(appsByMonth), ...Object.keys(respByMonth)]))
+    .filter(monthKey => {
+      if (dateRange.startMonth && monthKey < dateRange.startMonth) return false;
+      if (dateRange.endMonth && monthKey > dateRange.endMonth) return false;
+      return true;
+    })
+    .sort();
 
   const combinedChartData = monthKeys.map(monthKey => {
     const app = appsByMonth[monthKey] || {
@@ -165,9 +145,6 @@ const AnalyticsDashboard = ({ jobs }) => {
       responded: resp.responded
     };
   });
-
-  // Filter data by selected time range
-  const filteredChartData = filterDataByTimeRange(combinedChartData, timeRange);
 
   const TimeRangeButton = ({ range, label }) => (
     <button
@@ -190,35 +167,53 @@ const AnalyticsDashboard = ({ jobs }) => {
 
   return (
     <div className="analytics-dashboard">
+      {/* Dashboard Time Range Filter */}
+      <div style={{
+        marginBottom: '1.5rem',
+        display: 'flex',
+        gap: '0.75rem',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: '500' }}>Time range:</span>
+          <TimeRangeButton range="past30" label="Past 30 days" />
+          <TimeRangeButton range="past60" label="Past 60 days" />
+          <TimeRangeButton range="past90" label="Past 90 days" />
+          <TimeRangeButton range="past12months" label="Past 12 months" />
+          <TimeRangeButton range="thisYear" label="This Year" />
+          <TimeRangeButton range="lastYear" label="Last Year" />
+          <TimeRangeButton range="all" label="All time" />
+        </div>
+        {timeRange !== 'all' && (
+          <span style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem' }}>
+            Showing {filteredJobs.length} of {jobs.length} applications
+          </span>
+        )}
+      </div>
+
       {/* Key Metrics */}
-      <KeyMetricsGrid metrics={overview} />
+      <KeyMetricsGrid metrics={overview} constantMetrics={constantOverview} />
 
       {/* Charts Grid */}
       <div className="charts-section">
         {/* Large charts - full width */}
         <div className="chart-large">
           <ChartCard title="Applications & response activity">
-            <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
-              <TimeRangeButton range="past30" label="Past 30 days" />
-              <TimeRangeButton range="past12months" label="Past 12 months" />
-              <TimeRangeButton range="thisYear" label="This Year" />
-              <TimeRangeButton range="lastYear" label="Last Year" />
-              <TimeRangeButton range="all" label="All time" />
-            </div>
-            {filteredChartData.length === 0 ? (
+            {combinedChartData.length === 0 ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                 No data available for this time range
               </div>
             ) : (
               <TripleLineChartComponent
-                data={filteredChartData}
+                data={combinedChartData}
                 label1="Applications"
                 label2="Responses and rejections"
                 label3="Actual callbacks"
                 color1="#6b8aff"
                 color2="#f59e0b"
                 color3="#10b981"
-                useDailyData={shouldUseDailyData(filteredChartData)}
               />
             )}
           </ChartCard>
@@ -270,12 +265,12 @@ const AnalyticsDashboard = ({ jobs }) => {
                   </thead>
                   <tbody>
                     {STATUSES.map(status => {
-                      const count = jobs.filter(j => j.status === status).length;
+                      const count = filteredJobs.filter(j => j.status === status).length;
                       return (
                         <tr key={status}>
                           <td><StatusBadge status={status} /></td>
                           <td><strong>{count}</strong></td>
-                          <td>{jobs.length > 0 ? Math.round((count / jobs.length) * 100) : 0}%</td>
+                          <td>{filteredJobs.length > 0 ? Math.round((count / filteredJobs.length) * 100) : 0}%</td>
                         </tr>
                       );
                     })}
