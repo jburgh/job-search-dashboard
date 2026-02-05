@@ -20,6 +20,56 @@ A professional, interactive dashboard for tracking job applications, managing pi
 - **ES Modules** - Modern JavaScript module system
 - **Responsive CSS** - Custom styling with CSS variables
 
+## Getting Started
+
+### Prerequisites
+
+Run entirely in the browser:
+
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+
+Optional, for local installations:
+
+- Node.js 18+
+- npm or yarn
+
+### Hosted version (GitHub Pages)
+
+Open: https://jburgh.github.io/job-search-dashboard/
+
+
+### Local installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/jburgh/job-search-dashboard.git
+cd job-search-dashboard
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open http://localhost:3000 in your browser
+
+### Build for Production
+
+```bash
+npm run build
+npm run preview  # Preview the production build
+```
+
+## Data Storage
+
+All data (jobs, companies, categories, hidden companies, and settings) is stored in your browser's localStorage. Data persists across sessions but is only stored locally on this device. Use JSON backups for migration or recovery.
+
+
 ## Project Structure
 
 ```
@@ -89,44 +139,6 @@ src/
 └── styles/
     └── main.css             # Application styles
 ```
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/jburgh/job-search-dashboard.git
-cd job-search-dashboard
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
-```bash
-npm run dev
-```
-
-4. Open http://localhost:3000 in your browser
-
-### Build for Production
-
-```bash
-npm run build
-npm run preview  # Preview the production build
-```
-
-## Data Storage
-
-All data (jobs, companies, categories, hidden companies, and settings) is stored in your browser's localStorage. Data persists across sessions but is only stored locally on this device. Use JSON backups for migration or recovery.
 
 ## Color Scheme
 
