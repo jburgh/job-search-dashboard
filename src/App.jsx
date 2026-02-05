@@ -5,7 +5,9 @@ import { PROGRESSION_STAGES } from './constants/progressionStages';
 import { StorageUtil } from './utils/storage';
 import { SecurityUtil } from './utils/security';
 import { PerformanceUtil } from './utils/performance';
+import { useUpdateChecker } from './hooks/useUpdateChecker';
 import { Header, Footer } from './components/layout';
+import { UpdateBanner } from './components/common';
 import { AnalyticsDashboard } from './components/dashboard';
 import { JobModal, ImportModal, CompanyModal } from './components/modals';
 import { Companies, JobsTable } from './components/pages';
@@ -38,6 +40,9 @@ function App() {
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
+
+  // Update checker
+  const { showUpdateBanner, dismissBanner, refreshPage } = useUpdateChecker();
 
   // Core state
   const [view, setView] = useState("dashboard");
@@ -680,6 +685,13 @@ function App() {
 
   return (
     <div className="app">
+      {showUpdateBanner && (
+        <UpdateBanner
+          onDismiss={dismissBanner}
+          onRefresh={refreshPage}
+          commitsUrl={APP_CONFIG.GITHUB_COMMITS_URL}
+        />
+      )}
       <Header
         view={view}
         setView={setView}

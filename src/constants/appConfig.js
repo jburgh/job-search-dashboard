@@ -5,6 +5,7 @@ export const APP_CONFIG = {
   // Application version and metadata
   VERSION: '1.0',
   APP_NAME: 'Job Search Dashboard',
+  GITHUB_COMMITS_URL: 'https://github.com/jburgh/job-search-dashboard/commits/main/',
 
   // Storage keys
   STORAGE_KEYS: {
