@@ -242,7 +242,7 @@ const AnalyticsDashboard = ({ jobs }) => {
         {/* Responses and Statuses Side by Side */}
         <div className="chart-row">
           <div className="chart-medium">
-            <ChartCard title="Responses by progression">
+            <ChartCard title="Callbacks by progression">
               <PieChartComponent data={progressionChartData} />
             </ChartCard>
           </div>

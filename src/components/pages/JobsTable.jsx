@@ -166,15 +166,6 @@ function JobsTable({
     setCurrentPage(1);
   }, [filters.search, selectedStatuses.length, selectedProgressionStages.length, selectedPriorities.length, dateRangeFilter]);
 
-  // Count active filters
-  const activeFiltersCount = [
-    filters.search,
-    selectedStatuses.length > 0,
-    selectedProgressionStages.length > 0,
-    selectedPriorities.length > 0,
-    dateRangeFilter.start || dateRangeFilter.end
-  ].filter(Boolean).length;
-
   const clearFilters = () => {
     setFilters({ status: 'all', priority: 'all', company: '', search: '' });
     setSelectedStatuses([]);
@@ -667,7 +658,6 @@ function JobsTable({
               }}
             >
               📅 Application date
-              {activeFiltersCount > 0 && ` (${activeFiltersCount})`}
             </button>
 
             {/* Clear All Filters */}

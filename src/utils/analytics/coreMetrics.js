@@ -36,7 +36,8 @@ export const getApplicationsByTimeWindow = (jobs) => {
 };
 
 /**
- * Calculate response rate
+ * Calculate response rate (callback rate)
+ * Counts applications that progressed beyond the initial "Application" stage
  */
 export const getResponseRate = (jobs) => {
   const applicationsWithDate = jobs.filter(job => job.dateApplied);
@@ -45,13 +46,8 @@ export const getResponseRate = (jobs) => {
   if (total === 0) return { count: 0, percentage: 0, total, waiting: 0 };
 
   const responded = applicationsWithDate.filter(job => {
-    if (job.status === JOB_STATUSES.IN_PROGRESS) return true;
     const prog = job.progression || PROGRESSION_STAGES.APPLICATION;
-    if (prog !== PROGRESSION_STAGES.APPLICATION) return true;
-    if (job.status === JOB_STATUSES.CLOSED && job.closeReason === CLOSE_REASONS.WITHDREW) {
-      return true;
-    }
-    return false;
+    return prog !== PROGRESSION_STAGES.APPLICATION;
   });
 
   const waiting = applicationsWithDate.filter(job => {
@@ -102,6 +98,7 @@ export const getWaitingStatus = (jobs) => {
 
 /**
  * Calculate interview conversion rate
+ * Counts applications that reached Partial Loop, Full Loop, or Offer stage
  */
 export const getInterviewConversionRate = (jobs) => {
   const applicationsWithDate = jobs.filter(job => job.dateApplied);
@@ -110,7 +107,6 @@ export const getInterviewConversionRate = (jobs) => {
   if (total === 0) return { count: 0, percentage: 0, total };
 
   const interviewStages = [
-    PROGRESSION_STAGES.RECRUITER_SCREEN,
     PROGRESSION_STAGES.PARTIAL_LOOP,
     PROGRESSION_STAGES.FULL_LOOP,
     PROGRESSION_STAGES.OFFER
@@ -187,6 +183,7 @@ export const getClosureReasons = (jobs) => {
   const counts = {
     [CLOSE_REASONS.REJECTED]: 0,
     [CLOSE_REASONS.GHOSTED]: 0,
+    [CLOSE_REASONS.DECLINED_OFFER]: 0,
     [CLOSE_REASONS.WITHDREW]: 0,
     "Unknown": 0
   };

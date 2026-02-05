@@ -21,7 +21,7 @@ const PieChartComponent = ({ data }) => {
     chartRef.current = new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: data.map(d => d.label),
+        labels: data.map(d => `${d.label} (${d.value})`),
         datasets: [{
           data: data.map(d => d.value),
           backgroundColor: colors.slice(0, data.length),
