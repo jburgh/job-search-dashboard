@@ -3,11 +3,14 @@ import { StatusBadge, PriorityBadge } from '../common';
 import { JOB_STATUSES } from '../../constants/jobStatuses';
 import { CLOSE_REASONS } from '../../constants/closeReasons';
 import { PRIORITIES } from '../../constants/priorities';
+import { PROGRESSIONS } from '../../constants/progressionStages';
 import { UIUtil } from '../../utils/ui';
 
 // Status and priority lists for filters
 const STATUSES = Object.values(JOB_STATUSES);
 const PRIORITY_LIST = Object.values(PRIORITIES);
+const OPEN_STATUSES = [JOB_STATUSES.APPLIED, JOB_STATUSES.IN_PROGRESS];
+const PROGRESSED_STAGES = PROGRESSIONS.filter(p => p !== 'Application');
 
 /**
  * JobsTable Component
@@ -84,8 +87,10 @@ function JobsTable({
 
   // Multiselect filters
   const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [selectedProgressionStages, setSelectedProgressionStages] = useState([]);
   const [selectedPriorities, setSelectedPriorities] = useState([]);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const [showProgressionDropdown, setShowProgressionDropdown] = useState(false);
   const [showPriorityDropdown, setShowPriorityDropdown] = useState(false);
 
   // Close dropdowns when clicking outside
@@ -94,13 +99,16 @@ function JobsTable({
       if (showStatusDropdown && !event.target.closest('.filter-select') && !event.target.closest('[data-dropdown="status"]')) {
         setShowStatusDropdown(false);
       }
+      if (showProgressionDropdown && !event.target.closest('.filter-select') && !event.target.closest('[data-dropdown="progression"]')) {
+        setShowProgressionDropdown(false);
+      }
       if (showPriorityDropdown && !event.target.closest('.filter-select') && !event.target.closest('[data-dropdown="priority"]')) {
         setShowPriorityDropdown(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showStatusDropdown, showPriorityDropdown]);
+  }, [showStatusDropdown, showProgressionDropdown, showPriorityDropdown]);
 
   // Apply all filters to jobs
   const filteredJobs = jobs.filter(job => {
@@ -115,6 +123,11 @@ function JobsTable({
 
     // Status multiselect filter
     if (selectedStatuses.length > 0 && !selectedStatuses.includes(job.status)) {
+      return false;
+    }
+
+    // Progression stages multiselect filter
+    if (selectedProgressionStages.length > 0 && !selectedProgressionStages.includes(job.progression)) {
       return false;
     }
 
@@ -151,12 +164,13 @@ function JobsTable({
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters.search, selectedStatuses.length, selectedPriorities.length, dateRangeFilter]);
+  }, [filters.search, selectedStatuses.length, selectedProgressionStages.length, selectedPriorities.length, dateRangeFilter]);
 
   // Count active filters
   const activeFiltersCount = [
     filters.search,
     selectedStatuses.length > 0,
+    selectedProgressionStages.length > 0,
     selectedPriorities.length > 0,
     dateRangeFilter.start || dateRangeFilter.end
   ].filter(Boolean).length;
@@ -164,6 +178,7 @@ function JobsTable({
   const clearFilters = () => {
     setFilters({ status: 'all', priority: 'all', company: '', search: '' });
     setSelectedStatuses([]);
+    setSelectedProgressionStages([]);
     setSelectedPriorities([]);
     setDateRangeFilter({ start: '', end: '' });
   };
@@ -191,6 +206,32 @@ function JobsTable({
         ? prev.filter(s => s !== status)
         : [...prev, status]
     );
+  };
+
+  const allOpenSelected = OPEN_STATUSES.every(s => selectedStatuses.includes(s));
+  const toggleAllOpen = () => {
+    if (allOpenSelected) {
+      setSelectedStatuses(prev => prev.filter(s => !OPEN_STATUSES.includes(s)));
+    } else {
+      setSelectedStatuses(prev => [...new Set([...prev, ...OPEN_STATUSES])]);
+    }
+  };
+
+  const toggleProgressionStage = (stage) => {
+    setSelectedProgressionStages(prev =>
+      prev.includes(stage)
+        ? prev.filter(s => s !== stage)
+        : [...prev, stage]
+    );
+  };
+
+  const allProgressedSelected = PROGRESSED_STAGES.every(s => selectedProgressionStages.includes(s));
+  const toggleAllProgressed = () => {
+    if (allProgressedSelected) {
+      setSelectedProgressionStages(prev => prev.filter(s => !PROGRESSED_STAGES.includes(s)));
+    } else {
+      setSelectedProgressionStages(prev => [...new Set([...prev, ...PROGRESSED_STAGES])]);
+    }
   };
 
   const togglePriority = (priority) => {
@@ -318,6 +359,37 @@ function JobsTable({
                   >
                     Clear all
                   </button>
+                  <div style={{ borderBottom: "1px solid var(--border-primary)", margin: "0.5rem 0" }} />
+                  <label
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      padding: "0.5rem",
+                      cursor: "pointer",
+                      borderRadius: "6px",
+                      transition: "background 0.2s",
+                      fontSize: "0.9rem",
+                      color: "var(--text-primary)",
+                      fontWeight: "500"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-hover)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={allOpenSelected}
+                      onChange={toggleAllOpen}
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        cursor: "pointer",
+                        accentColor: "var(--accent-primary)"
+                      }}
+                    />
+                    <span>All open</span>
+                  </label>
+                  <div style={{ borderBottom: "1px solid var(--border-primary)", margin: "0.5rem 0" }} />
                   {STATUSES.map(status => (
                     <label
                       key={status}
@@ -347,6 +419,134 @@ function JobsTable({
                         }}
                       />
                       <span>{status}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Progression Stages Multiselect */}
+            <div style={{ position: "relative" }}>
+              <button
+                className="filter-select"
+                onClick={() => setShowProgressionDropdown(!showProgressionDropdown)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "0.5rem",
+                  minWidth: "160px",
+                  cursor: "pointer"
+                }}
+              >
+                <span>
+                  {selectedProgressionStages.length === 0
+                    ? 'All stages'
+                    : `Stage (${selectedProgressionStages.length})`}
+                </span>
+                <span style={{ fontSize: "0.7rem" }}>▼</span>
+              </button>
+              {showProgressionDropdown && (
+                <div data-dropdown="progression" style={{
+                  position: "absolute",
+                  top: "calc(100% + 4px)",
+                  left: 0,
+                  background: "var(--bg-elevated)",
+                  border: "1px solid var(--border-primary)",
+                  borderRadius: "10px",
+                  padding: "0.5rem",
+                  boxShadow: "var(--shadow-lg)",
+                  zIndex: 1000,
+                  minWidth: "200px",
+                  maxHeight: "300px",
+                  overflowY: "auto"
+                }}>
+                  <button
+                    onClick={() => setSelectedProgressionStages([])}
+                    style={{
+                      width: "100%",
+                      padding: "0.5rem",
+                      marginBottom: "0.5rem",
+                      background: "var(--bg-hover)",
+                      border: "1px solid var(--border-primary)",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      color: "var(--text-secondary)",
+                      fontWeight: "500",
+                      transition: "all 0.2s"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--accent-primary)";
+                      e.currentTarget.style.color = "white";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "var(--bg-hover)";
+                      e.currentTarget.style.color = "var(--text-secondary)";
+                    }}
+                  >
+                    Clear all
+                  </button>
+                  <div style={{ borderBottom: "1px solid var(--border-primary)", margin: "0.5rem 0" }} />
+                  <label
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      padding: "0.5rem",
+                      cursor: "pointer",
+                      borderRadius: "6px",
+                      transition: "background 0.2s",
+                      fontSize: "0.9rem",
+                      color: "var(--text-primary)",
+                      fontWeight: "500"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-hover)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={allProgressedSelected}
+                      onChange={toggleAllProgressed}
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        cursor: "pointer",
+                        accentColor: "var(--accent-primary)"
+                      }}
+                    />
+                    <span>All engagements</span>
+                  </label>
+                  <div style={{ borderBottom: "1px solid var(--border-primary)", margin: "0.5rem 0" }} />
+                  {PROGRESSIONS.map(stage => (
+                    <label
+                      key={stage}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        padding: "0.5rem",
+                        cursor: "pointer",
+                        borderRadius: "6px",
+                        transition: "background 0.2s",
+                        fontSize: "0.9rem",
+                        color: "var(--text-primary)"
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-hover)"}
+                      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedProgressionStages.includes(stage)}
+                        onChange={() => toggleProgressionStage(stage)}
+                        style={{
+                          width: "16px",
+                          height: "16px",
+                          cursor: "pointer",
+                          accentColor: "var(--accent-primary)"
+                        }}
+                      />
+                      <span>{stage}</span>
                     </label>
                   ))}
                 </div>
@@ -471,7 +671,7 @@ function JobsTable({
             </button>
 
             {/* Clear All Filters */}
-            {(filters.search || selectedStatuses.length > 0 || selectedPriorities.length > 0 || dateRangeFilter.start || dateRangeFilter.end) && (
+            {(filters.search || selectedStatuses.length > 0 || selectedProgressionStages.length > 0 || selectedPriorities.length > 0 || dateRangeFilter.start || dateRangeFilter.end) && (
               <button
                 onClick={clearFilters}
                 style={{
