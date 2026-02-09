@@ -23,22 +23,173 @@ import { Companies, JobsTable } from './components/pages';
  * - Theme toggling
  */
 function App() {
+  const availableThemes = ['lite', 'dark', 'neon80s', 'suede', 'meow'];
+  const normalizeTheme = (value) => {
+    if (availableThemes.includes(value)) return value;
+    if (value === 'light') return 'lite';
+    if (value === 'dark') return 'dark';
+    if (value === 'masculine') return 'suede';
+    return 'lite';
+  };
+
+  const themeTokens = {
+    lite: {
+      '--bg-primary': '#fafafa',
+      '--bg-secondary': '#ffffff',
+      '--bg-tertiary': '#f5f5f5',
+      '--bg-elevated': '#ffffff',
+      '--bg-hover': '#f8f8f8',
+      '--text-primary': '#1a1a1a',
+      '--text-secondary': '#666666',
+      '--text-tertiary': '#999999',
+      '--border-primary': '#e5e5e5',
+      '--border-secondary': '#f0f0f0',
+      '--accent-primary': '#2563eb',
+      '--accent-secondary': '#3b82f6',
+      '--accent-hover': '#1d4ed8',
+      '--success': '#10b981',
+      '--warning': '#f59e0b',
+      '--warning-bg': '#fee2e2',
+      '--warning-text': '#991b1b',
+      '--danger': '#ef4444',
+      '--shadow-sm': '0 1px 2px rgba(0, 0, 0, 0.04)',
+      '--shadow-md': '0 4px 6px rgba(0, 0, 0, 0.07)',
+      '--shadow-lg': '0 10px 15px rgba(0, 0, 0, 0.1)',
+      '--shadow-xl': '0 20px 25px rgba(0, 0, 0, 0.12)'
+    },
+    dark: {
+      '--bg-primary': '#141414',
+      '--bg-secondary': '#1e1e1e',
+      '--bg-tertiary': '#262626',
+      '--bg-elevated': '#222222',
+      '--bg-hover': '#2e2e2e',
+      '--text-primary': '#e5e5e5',
+      '--text-secondary': '#a3a3a3',
+      '--text-tertiary': '#737373',
+      '--border-primary': '#303030',
+      '--border-secondary': '#262626',
+      '--accent-primary': '#3b82f6',
+      '--accent-secondary': '#60a5fa',
+      '--accent-hover': '#2563eb',
+      '--success': '#10b981',
+      '--warning': '#f59e0b',
+      '--warning-bg': '#2a2014',
+      '--warning-text': '#fbbf24',
+      '--danger': '#ef4444',
+      '--shadow-sm': '0 1px 2px rgba(0, 0, 0, 0.4)',
+      '--shadow-md': '0 4px 6px rgba(0, 0, 0, 0.5)',
+      '--shadow-lg': '0 10px 15px rgba(0, 0, 0, 0.55)',
+      '--shadow-xl': '0 20px 25px rgba(0, 0, 0, 0.6)'
+    },
+    neon80s: {
+      '--bg-primary': '#0d0221',
+      '--bg-secondary': '#261447',
+      '--bg-tertiary': '#2e2157',
+      '--bg-elevated': '#241734',
+      '--bg-hover': '#023788',
+      '--text-primary': '#ff6ccf',
+      '--text-secondary': '#d40078',
+      '--text-tertiary': '#920075',
+      '--border-primary': '#2e2157',
+      '--border-secondary': '#241734',
+      '--accent-primary': '#2de2e6',
+      '--accent-secondary': '#ff3864',
+      '--accent-hover': '#f6019d',
+      '--success': '#2de2e6',
+      '--warning': '#f9c80e',
+      '--warning-bg': '#241734',
+      '--warning-text': '#ff6c11',
+      '--danger': '#fd1d53',
+      '--shadow-sm': '0 1px 2px rgba(13, 2, 33, 0.5)',
+      '--shadow-md': '0 4px 6px rgba(13, 2, 33, 0.6)',
+      '--shadow-lg': '0 10px 15px rgba(13, 2, 33, 0.65)',
+      '--shadow-xl': '0 20px 25px rgba(13, 2, 33, 0.7)'
+    },
+    suede: {
+      '--bg-primary': '#232D30',
+      '--bg-secondary': '#2C3639',
+      '--bg-tertiary': '#354244',
+      '--bg-elevated': '#303D40',
+      '--bg-hover': '#3F4E4F',
+      '--text-primary': '#DCD7C9',
+      '--text-secondary': '#B8A089',
+      '--text-tertiary': '#7A8A8B',
+      '--border-primary': '#3F4E4F',
+      '--border-secondary': '#354244',
+      '--accent-primary': '#A27B5B',
+      '--accent-secondary': '#C4AD94',
+      '--accent-hover': '#B8906E',
+      '--success': '#6B9E7A',
+      '--warning': '#C49A6C',
+      '--warning-bg': '#3A3228',
+      '--warning-text': '#DCD7C9',
+      '--danger': '#9E5B5B',
+      '--shadow-sm': '0 1px 2px rgba(35, 45, 48, 0.6)',
+      '--shadow-md': '0 4px 6px rgba(35, 45, 48, 0.7)',
+      '--shadow-lg': '0 10px 15px rgba(35, 45, 48, 0.75)',
+      '--shadow-xl': '0 20px 25px rgba(35, 45, 48, 0.8)'
+    },
+    meow: {
+      '--bg-primary': '#FFF5EB',
+      '--bg-secondary': '#FFFFFF',
+      '--bg-tertiary': '#FDE8D4',
+      '--bg-elevated': '#FFFFFF',
+      '--bg-hover': '#FCEEE0',
+      '--text-primary': '#3B2218',
+      '--text-secondary': '#7A5C47',
+      '--text-tertiary': '#B09480',
+      '--border-primary': '#F0D5BD',
+      '--border-secondary': '#F7E4D4',
+      '--accent-primary': '#E8792B',
+      '--accent-secondary': '#F2A7BB',
+      '--accent-hover': '#D0621A',
+      '--success': '#5DAE5D',
+      '--warning': '#E5A822',
+      '--warning-bg': '#FFF0D5',
+      '--warning-text': '#8B6914',
+      '--danger': '#D94F4F',
+      '--shadow-sm': '0 1px 3px rgba(59, 34, 24, 0.08)',
+      '--shadow-md': '0 4px 8px rgba(59, 34, 24, 0.10)',
+      '--shadow-lg': '0 10px 20px rgba(59, 34, 24, 0.12)',
+      '--shadow-xl': '0 20px 30px rgba(59, 34, 24, 0.15)'
+    }
+  };
+
+  const applyThemeToDocument = (nextTheme) => {
+    const tokens = themeTokens[nextTheme] || themeTokens.lite;
+    Object.entries(tokens).forEach(([name, value]) => {
+      document.documentElement.style.setProperty(name, value);
+      if (document.body) {
+        document.body.style.setProperty(name, value);
+      }
+    });
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    if (document.body) {
+      document.body.setAttribute('data-theme', nextTheme);
+    }
+    const rootEl = document.getElementById('root');
+    if (rootEl) {
+      rootEl.setAttribute('data-theme', nextTheme);
+    }
+    localStorage.setItem('theme', nextTheme);
+  };
+
   // Theme state
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('theme');
-    if (saved) return saved;
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return prefersDark ? 'dark' : 'light';
+    if (saved) return normalizeTheme(saved);
+    return 'lite';
   });
 
   // Apply theme to document
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    applyThemeToDocument(theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const handleThemeChange = (nextTheme) => {
+    const normalized = normalizeTheme(nextTheme);
+    applyThemeToDocument(normalized);
+    setTheme(normalized);
   };
 
   // Update checker
@@ -700,7 +851,7 @@ function App() {
         onImport={() => setShowImportModal(true)}
         lastBackupTime={lastBackupTime}
         theme={theme}
-        toggleTheme={toggleTheme}
+        setTheme={handleThemeChange}
       />
 
       <main className="main">

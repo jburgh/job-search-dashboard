@@ -157,6 +157,37 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+.theme-select {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+    height: 40px;
+    padding: 0 1.75rem 0 0.75rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    padding-right: 1.75rem;
+}
+
+.theme-select:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.theme-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
 .main {
     max-width: 1400px;
     margin: 0 auto;
@@ -1026,4 +1057,289 @@ body {
     .update-banner-link {
         margin-left: 0;
     }
+}
+
+/* ======================
+   MEOW THEME
+   ====================== */
+
+/* Paw print cursor */
+[data-theme="meow"],
+[data-theme="meow"] * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='16' rx='4.5' ry='3.5' fill='%23E8792B'/%3E%3Ccircle cx='6.5' cy='10' r='2.2' fill='%23E8792B'/%3E%3Ccircle cx='17.5' cy='10' r='2.2' fill='%23E8792B'/%3E%3Ccircle cx='10' cy='7.5' r='2' fill='%23E8792B'/%3E%3Ccircle cx='14' cy='7.5' r='2' fill='%23E8792B'/%3E%3C/svg%3E") 12 12, auto;
+}
+
+[data-theme="meow"] button,
+[data-theme="meow"] a,
+[data-theme="meow"] select,
+[data-theme="meow"] [role="button"],
+[data-theme="meow"] .nav-btn,
+[data-theme="meow"] .theme-toggle,
+[data-theme="meow"] .theme-select {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cellipse cx='14' cy='18' rx='5' ry='4' fill='%23D0621A'/%3E%3Ccircle cx='7.5' cy='11' r='2.5' fill='%23D0621A'/%3E%3Ccircle cx='20.5' cy='11' r='2.5' fill='%23D0621A'/%3E%3Ccircle cx='11.5' cy='8' r='2.2' fill='%23D0621A'/%3E%3Ccircle cx='16.5' cy='8' r='2.2' fill='%23D0621A'/%3E%3C/svg%3E") 14 14, pointer;
+}
+
+/* Paw print background pattern */
+[data-theme="meow"] .app {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg opacity='0.04'%3E%3Cellipse cx='40' cy='48' rx='8' ry='6' fill='%23E8792B'/%3E%3Ccircle cx='30' cy='37' r='3.5' fill='%23E8792B'/%3E%3Ccircle cx='50' cy='37' r='3.5' fill='%23E8792B'/%3E%3Ccircle cx='35' cy='32' r='3' fill='%23E8792B'/%3E%3Ccircle cx='45' cy='32' r='3' fill='%23E8792B'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat;
+}
+
+/* Cat ears on the header */
+[data-theme="meow"] .header {
+    position: sticky;
+    overflow: visible;
+}
+
+/* Bigger cat emoji in logo */
+[data-theme="meow"] .logo .theme-toggle {
+    font-size: 1.8rem;
+    width: 44px;
+    height: 44px;
+    position: relative;
+    overflow: visible;
+}
+
+/* Cat ears on the logo icon */
+[data-theme="meow"] .logo .theme-toggle::before,
+[data-theme="meow"] .logo .theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 14px solid var(--accent-primary);
+    z-index: 1;
+    filter: drop-shadow(0 -1px 0 #F2A7BB);
+}
+
+[data-theme="meow"] .logo .theme-toggle::before {
+    left: 2px;
+    transform: rotate(-12deg);
+}
+
+[data-theme="meow"] .logo .theme-toggle::after {
+    right: 2px;
+    transform: rotate(12deg);
+}
+
+/* Nav buttons get playful rounded style */
+[data-theme="meow"] .nav {
+    border-radius: 20px;
+    background: var(--bg-tertiary);
+    border: 2px dashed var(--border-primary);
+}
+
+[data-theme="meow"] .nav-btn {
+    border-radius: 16px;
+}
+
+[data-theme="meow"] .nav-btn.active {
+    background: var(--accent-primary);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(232, 121, 43, 0.3);
+}
+
+[data-theme="meow"] .nav-btn:hover:not(.active) {
+    background: var(--bg-hover);
+    color: var(--accent-primary);
+}
+
+/* Cards get paw-print styled borders */
+[data-theme="meow"] .stat-card,
+[data-theme="meow"] .chart-card {
+    border: 2px solid var(--border-primary);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+[data-theme="meow"] .stat-card:hover,
+[data-theme="meow"] .chart-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(232, 121, 43, 0.15);
+}
+
+/* Fish-bone border on the footer */
+[data-theme="meow"] .footer {
+    border-top: none;
+    position: relative;
+}
+
+[data-theme="meow"] .footer::before {
+    content: '🐟 🐟 🐟 🐟 🐟 🐟 🐟 🐟 🐟 🐟 🐟 🐟';
+    display: block;
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.5rem;
+    opacity: 0.35;
+    padding-bottom: 1rem;
+    border-top: 2px dashed var(--border-primary);
+    padding-top: 1rem;
+}
+
+/* Table rows get subtle hover with paw */
+[data-theme="meow"] .table tbody tr {
+    transition: all 0.2s ease;
+}
+
+[data-theme="meow"] .table tbody tr:hover {
+    background: var(--bg-hover);
+    box-shadow: inset 3px 0 0 var(--accent-primary);
+}
+
+/* Fun selection color */
+[data-theme="meow"] ::selection {
+    background: rgba(232, 121, 43, 0.25);
+    color: #3B2218;
+}
+
+/* Scrollbar styling */
+[data-theme="meow"] ::-webkit-scrollbar {
+    width: 10px;
+}
+
+[data-theme="meow"] ::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="meow"] ::-webkit-scrollbar-thumb {
+    background: var(--accent-secondary);
+    border-radius: 10px;
+    border: 2px solid var(--bg-tertiary);
+}
+
+[data-theme="meow"] ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
+
+/* Theme dropdown styled playfully */
+[data-theme="meow"] .theme-select {
+    border-radius: 16px;
+    border: 2px dashed var(--border-primary);
+    font-weight: 600;
+}
+
+[data-theme="meow"] .theme-select:hover,
+[data-theme="meow"] .theme-select:focus {
+    border-style: solid;
+    border-color: var(--accent-primary);
+}
+
+/* Icon buttons get a rounder, friendlier look */
+[data-theme="meow"] .theme-toggle {
+    border-radius: 50%;
+    border: 2px dashed var(--border-primary);
+}
+
+[data-theme="meow"] .theme-toggle:hover {
+    border-style: solid;
+    border-color: var(--accent-primary);
+    transform: scale(1.1) rotate(8deg);
+}
+
+/* Modal styling */
+[data-theme="meow"] .modal-content {
+    border-radius: 20px;
+    border: 2px solid var(--accent-secondary);
+}
+
+/* Animated floating cats and fish */
+[data-theme="meow"] .app::after {
+    content: '😺';
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    animation: meow-float 3s ease-in-out infinite;
+    z-index: 50;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    pointer-events: none;
+}
+
+[data-theme="meow"] .app::before {
+    content: '🐟';
+    position: fixed;
+    bottom: 2rem;
+    right: 4.5rem;
+    font-size: 1.2rem;
+    animation: fish-swim 4s ease-in-out infinite;
+    z-index: 50;
+    pointer-events: none;
+}
+
+[data-theme="meow"] .main::before {
+    content: '🐾';
+    position: fixed;
+    bottom: 4.5rem;
+    right: 1.8rem;
+    font-size: 1rem;
+    animation: meow-float 2.5s ease-in-out infinite 0.5s;
+    z-index: 50;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+[data-theme="meow"] .main::after {
+    content: '😸';
+    position: fixed;
+    bottom: 1.2rem;
+    left: 1.5rem;
+    font-size: 1.6rem;
+    animation: meow-float 3.5s ease-in-out infinite 1s;
+    z-index: 50;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    pointer-events: none;
+}
+
+[data-theme="meow"] .footer::after {
+    content: '🐟';
+    position: fixed;
+    bottom: 1.8rem;
+    left: 4rem;
+    font-size: 1rem;
+    animation: fish-swim 5s ease-in-out infinite 0.8s;
+    z-index: 50;
+    pointer-events: none;
+}
+
+@keyframes meow-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-8px) rotate(3deg); }
+    75% { transform: translateY(-4px) rotate(-3deg); }
+}
+
+@keyframes fish-swim {
+    0%, 100% { transform: translateX(0) scaleX(1); }
+    40% { transform: translateX(-12px) scaleX(1); }
+    50% { transform: translateX(-12px) scaleX(-1); }
+    90% { transform: translateX(0) scaleX(-1); }
+}
+
+/* Whiskers on stat card values */
+[data-theme="meow"] .stat-value {
+    position: relative;
+}
+
+[data-theme="meow"] .stat-value::before,
+[data-theme="meow"] .stat-value::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent-primary);
+    opacity: 0.3;
+}
+
+[data-theme="meow"] .stat-value::before {
+    left: -22px;
+    transform: rotate(-15deg);
+}
+
+[data-theme="meow"] .stat-value::after {
+    right: -22px;
+    transform: rotate(15deg);
 }

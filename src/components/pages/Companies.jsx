@@ -287,8 +287,8 @@ function Companies({
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <h1 style={{ color: "#6b8aff" }}>Target companies</h1>
-          <span style={{ color: "#9ca3af", fontSize: "0.9rem", marginLeft: "0.5rem" }}>
+          <h1 style={{ color: "var(--accent-primary)", fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: "1.75rem" }}>Target companies</h1>
+          <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginLeft: "0.5rem" }}>
             {filteredCompaniesList.length} {filteredCompaniesList.length === 1 ? 'company' : 'companies'}
           </span>
           {selectedCompanies.length > 0 && (
@@ -299,7 +299,7 @@ function Companies({
         </div>
 
         <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-          <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#9ca3af", cursor: "pointer" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "var(--text-secondary)", cursor: "pointer" }}>
             <input
               type="checkbox"
               checked={showHidden}

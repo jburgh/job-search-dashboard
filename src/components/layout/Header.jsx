@@ -4,8 +4,15 @@ import { PerformanceMonitor } from '../common';
 /**
  * Header component with navigation and controls
  */
-function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, toggleTheme }) {
+function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, setTheme }) {
   const [showPerf, setShowPerf] = useState(false);
+  const themeOptions = [
+    { id: 'lite', label: 'Lite' },
+    { id: 'dark', label: 'Dark' },
+    { id: 'neon80s', label: '80s' },
+    { id: 'suede', label: 'Suede' },
+    { id: 'meow', label: 'Meow 🐱' }
+  ];
 
   const daysSinceBackup = lastBackupTime
     ? Math.floor((Date.now() - lastBackupTime.getTime()) / (1000 * 60 * 60 * 24))
@@ -18,8 +25,8 @@ function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, togg
       <header className="header">
         <div className="header-content">
           <div className="logo">
-            <div className="theme-toggle">🎯</div>
-            <span>Job Search Dashboard</span>
+            <div className="theme-toggle">{theme === 'meow' ? '🐱' : '🎯'}</div>
+            <span>{theme === 'meow' ? 'Job Search Dashpurr 🐾' : 'Job Search Dashboard'}</span>
           </div>
           <div className="header-controls">
             <nav className="nav">
@@ -31,8 +38,8 @@ function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, togg
                 onClick={onBackup}
                 style={{
                   borderColor: backupWarning ? "var(--warning)" : undefined,
-                  background: backupWarning ? (theme === 'dark' ? '#7c2d12' : '#faa29d') : undefined,
-                  color: backupWarning ? (theme === 'dark' ? '#fed7aa' : 'var(--text-primary)') : undefined
+                  background: backupWarning ? "var(--warning-bg)" : undefined,
+                  color: backupWarning ? "var(--warning-text)" : undefined
                 }}
                 title={lastBackupTime ? `Last backup: ${lastBackupTime.toLocaleDateString()}` : "No backup yet"}
               >
@@ -40,6 +47,17 @@ function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, togg
               </button>
               <button className="nav-btn" onClick={onImport}>📥 Import</button>
             </nav>
+
+            <select
+              className="theme-select"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              aria-label="Theme"
+            >
+              {themeOptions.map((option) => (
+                <option key={option.id} value={option.id}>{option.label}</option>
+              ))}
+            </select>
 
             <button
               className="theme-toggle"
@@ -64,14 +82,6 @@ function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, togg
               style={{ fontSize: '1.2rem' }}
             >
               ⚡
-            </button>
-
-            <button
-              className="theme-toggle"
-              onClick={toggleTheme}
-              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-            >
-              {theme === 'light' ? '🌙' : '☀️'}
             </button>
           </div>
         </div>
