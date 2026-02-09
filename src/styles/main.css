@@ -1354,3 +1354,439 @@ body {
     right: -22px;
     transform: rotate(15deg);
 }
+
+/* ======================
+   80s / NEON THEME
+   ====================== */
+
+/* Outrun background with palm trees, grid, and sunset */
+[data-theme="neon80s"] .app {
+    background: url('../assets/outrun.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Semi-transparent content so background shows through */
+[data-theme="neon80s"] .header {
+    background: rgba(13, 2, 33, 0.85);
+    border-bottom: 2px solid #2e2157;
+    box-shadow: 0 2px 20px rgba(246, 1, 157, 0.15);
+}
+
+[data-theme="neon80s"] .table-container {
+    background: rgba(38, 20, 71, 0.75);
+    backdrop-filter: blur(6px);
+}
+
+[data-theme="neon80s"] .main {
+    background: transparent;
+}
+
+/* Neon text glow on logo */
+[data-theme="neon80s"] .logo {
+    text-shadow: 0 0 10px rgba(45, 226, 230, 0.5), 0 0 20px rgba(45, 226, 230, 0.2);
+}
+
+/* Nav gets neon border */
+[data-theme="neon80s"] .nav {
+    border: 1px solid #2e2157;
+    box-shadow: inset 0 0 8px rgba(246, 1, 157, 0.08);
+}
+
+[data-theme="neon80s"] .nav-btn {
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+[data-theme="neon80s"] .nav-btn.active {
+    background: linear-gradient(135deg, #f6019d, #ff3864);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(246, 1, 157, 0.5), 0 0 24px rgba(246, 1, 157, 0.2);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="neon80s"] .nav-btn:hover:not(.active) {
+    color: #2de2e6;
+    text-shadow: 0 0 8px rgba(45, 226, 230, 0.5);
+}
+
+/* Cards with neon border glow */
+[data-theme="neon80s"] .stat-card,
+[data-theme="neon80s"] .chart-card {
+    background: rgba(38, 20, 71, 0.75);
+    backdrop-filter: blur(6px);
+    border: 1px solid #2e2157;
+    transition: all 0.3s ease;
+}
+
+[data-theme="neon80s"] .modal-content {
+    background: rgba(36, 23, 52, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid #2e2157;
+    box-shadow: 0 0 30px rgba(246, 1, 157, 0.15), 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="neon80s"] .stat-card:hover {
+    border-color: #2de2e6;
+    box-shadow: 0 0 12px rgba(45, 226, 230, 0.2), 0 4px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+[data-theme="neon80s"] .chart-card:hover {
+    border-color: #f6019d;
+    box-shadow: 0 0 12px rgba(246, 1, 157, 0.2), 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Neon stat values */
+[data-theme="neon80s"] .stat-value {
+    text-shadow: 0 0 8px rgba(45, 226, 230, 0.4);
+}
+
+/* Neon scrollbar */
+[data-theme="neon80s"] ::-webkit-scrollbar {
+    width: 8px;
+}
+
+[data-theme="neon80s"] ::-webkit-scrollbar-track {
+    background: #0d0221;
+}
+
+[data-theme="neon80s"] ::-webkit-scrollbar-thumb {
+    background: linear-gradient(#2de2e6, #f6019d);
+    border-radius: 8px;
+}
+
+[data-theme="neon80s"] ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(#2de2e6, #ff3864);
+}
+
+/* Neon selection */
+[data-theme="neon80s"] ::selection {
+    background: rgba(246, 1, 157, 0.35);
+    color: #ffffff;
+}
+
+/* Table neon hover */
+[data-theme="neon80s"] .table tbody tr {
+    transition: all 0.2s ease;
+}
+
+[data-theme="neon80s"] .table tbody tr:hover {
+    background: rgba(45, 226, 230, 0.06);
+    box-shadow: inset 3px 0 0 #2de2e6;
+}
+
+/* Modal hide scrollbar */
+[data-theme="neon80s"] .modal {
+    scrollbar-width: none;
+}
+
+[data-theme="neon80s"] .modal::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Theme select neon */
+[data-theme="neon80s"] .theme-select:hover,
+[data-theme="neon80s"] .theme-select:focus {
+    border-color: #2de2e6;
+    box-shadow: 0 0 8px rgba(45, 226, 230, 0.3);
+}
+
+/* Footer with neon divider */
+[data-theme="neon80s"] .footer {
+    border-top: none;
+}
+
+[data-theme="neon80s"] .footer::before {
+    content: '▲ ▽ ▲ ▽ ▲ ▽ ▲ ▽ ▲ ▽ ▲ ▽ ▲';
+    display: block;
+    text-align: center;
+    font-size: 0.55rem;
+    letter-spacing: 0.4rem;
+    background: linear-gradient(90deg, #2de2e6, #f6019d, #ff6c11, #f9c80e, #2de2e6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0.5;
+    padding-bottom: 1rem;
+    border-top: 1px solid #2e2157;
+    padding-top: 1rem;
+}
+
+/* ======================
+   SPACE THEME
+   ====================== */
+
+/* Starfield background */
+[data-theme="space"] .app {
+    background:
+        linear-gradient(rgba(11, 26, 59, 0.3), rgba(11, 26, 59, 0.3)),
+        url('../assets/starfield.svg');
+    background-size: auto, 600px 600px;
+    background-repeat: no-repeat, repeat;
+}
+
+/* Twinkling stars via animated border glow on header and cards */
+@keyframes twinkle {
+    0% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.3; }
+}
+
+/* Glow effect on the header */
+[data-theme="space"] .header {
+    background: rgba(17, 34, 68, 0.9);
+    border-bottom: 2px solid #1E3A6E;
+    box-shadow: 0 2px 20px rgba(0, 229, 208, 0.15);
+}
+
+/* Logo gets a teal glow */
+[data-theme="space"] .logo {
+    text-shadow: 0 0 10px rgba(0, 229, 208, 0.4);
+}
+
+[data-theme="space"] .logo .theme-toggle {
+    font-size: 1.6rem;
+    animation: rocket-bob 2s ease-in-out infinite;
+    border-color: #1E3A6E;
+    background: rgba(22, 43, 82, 0.8);
+}
+
+@keyframes rocket-bob {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50% { transform: translateY(-4px) rotate(0deg); }
+}
+
+/* Bold, chunky nav with glow */
+[data-theme="space"] .nav {
+    border-radius: 16px;
+    border: 2px solid #1E3A6E;
+    background: rgba(22, 43, 82, 0.7);
+    box-shadow: inset 0 0 10px rgba(0, 229, 208, 0.05);
+}
+
+[data-theme="space"] .nav-btn {
+    border-radius: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    transition: all 0.25s ease;
+}
+
+[data-theme="space"] .nav-btn:hover:not(.active) {
+    background: rgba(59, 139, 255, 0.15);
+    color: #3B8BFF;
+    text-shadow: 0 0 8px rgba(59, 139, 255, 0.5);
+}
+
+/* Active nav button — starburst glow */
+[data-theme="space"] .nav-btn.active {
+    background: linear-gradient(135deg, #00E5D0, #3B8BFF);
+    color: #0B1A3B;
+    font-weight: 800;
+    box-shadow:
+        0 0 10px rgba(0, 229, 208, 0.5),
+        0 0 20px rgba(0, 229, 208, 0.2);
+    animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(0, 229, 208, 0.5), 0 0 20px rgba(0, 229, 208, 0.2); }
+    50% { box-shadow: 0 0 15px rgba(0, 229, 208, 0.7), 0 0 30px rgba(0, 229, 208, 0.3); }
+}
+
+/* Cards get space border glow */
+[data-theme="space"] .stat-card,
+[data-theme="space"] .chart-card {
+    border: 2px solid #1E3A6E;
+    border-radius: 14px;
+    background: rgba(17, 34, 68, 0.85);
+    transition: all 0.3s ease;
+}
+
+[data-theme="space"] .stat-card:hover {
+    border-color: #00E5D0;
+    box-shadow:
+        0 0 12px rgba(0, 229, 208, 0.25),
+        0 4px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+}
+
+[data-theme="space"] .chart-card:hover {
+    border-color: #3B8BFF;
+    box-shadow:
+        0 0 12px rgba(59, 139, 255, 0.25),
+        0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Stat values glow teal */
+[data-theme="space"] .stat-value {
+    color: #00E5D0;
+    text-shadow: 0 0 8px rgba(0, 229, 208, 0.4);
+}
+
+/* Bouncy buttons */
+[data-theme="space"] button {
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+[data-theme="space"] .nav-btn:active,
+[data-theme="space"] button:active {
+    transform: scale(0.95);
+}
+
+[data-theme="space"] .theme-toggle:hover {
+    transform: scale(1.15) rotate(8deg);
+    border-color: #FF6B2B;
+    box-shadow: 0 0 10px rgba(255, 107, 43, 0.4);
+}
+
+/* Theme dropdown glow */
+[data-theme="space"] .theme-select {
+    border: 2px solid #1E3A6E;
+    border-radius: 12px;
+    background: rgba(22, 43, 82, 0.8);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+[data-theme="space"] .theme-select:hover,
+[data-theme="space"] .theme-select:focus {
+    border-color: #00E5D0;
+    box-shadow: 0 0 8px rgba(0, 229, 208, 0.3);
+}
+
+/* Table gets space treatment */
+[data-theme="space"] .table th {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: #00E5D0;
+    border-bottom: 2px solid #1E3A6E;
+}
+
+[data-theme="space"] .table tbody tr {
+    transition: all 0.2s ease;
+}
+
+[data-theme="space"] .table tbody tr:hover {
+    background: rgba(0, 229, 208, 0.06);
+    box-shadow: inset 3px 0 0 #00E5D0;
+}
+
+/* Modals — no scrollbar flash */
+[data-theme="space"] .modal {
+    scrollbar-width: none;
+}
+
+[data-theme="space"] .modal::-webkit-scrollbar {
+    display: none;
+}
+
+/* Modal glow border */
+[data-theme="space"] .modal-content {
+    border: 2px solid #1E3A6E;
+    border-radius: 16px;
+    box-shadow: 0 0 30px rgba(0, 229, 208, 0.1), 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Scrollbar — space style */
+[data-theme="space"] ::-webkit-scrollbar {
+    width: 8px;
+}
+
+[data-theme="space"] ::-webkit-scrollbar-track {
+    background: #0B1A3B;
+}
+
+[data-theme="space"] ::-webkit-scrollbar-thumb {
+    background: linear-gradient(#00E5D0, #3B8BFF);
+    border-radius: 8px;
+}
+
+[data-theme="space"] ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(#00CCBA, #2B7BEF);
+}
+
+/* Selection color */
+[data-theme="space"] ::selection {
+    background: rgba(0, 229, 208, 0.3);
+    color: #FFFFFF;
+}
+
+/* Footer with star divider */
+[data-theme="space"] .footer {
+    border-top: none;
+    position: relative;
+}
+
+[data-theme="space"] .footer::before {
+    content: '✦  ✧  ★  ✧  ✦  ✧  ★  ✧  ✦  ✧  ★  ✧  ✦';
+    display: block;
+    text-align: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.6rem;
+    color: #00E5D0;
+    opacity: 0.4;
+    padding-bottom: 1rem;
+    border-top: 1px solid #1E3A6E;
+    padding-top: 1rem;
+}
+
+/* Floating rocket and planet */
+[data-theme="space"] .main::before {
+    content: '🪐';
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    font-size: 1.8rem;
+    animation: planet-spin 8s linear infinite;
+    z-index: 50;
+    pointer-events: none;
+    filter: drop-shadow(0 0 6px rgba(59, 139, 255, 0.4));
+}
+
+[data-theme="space"] .main::after {
+    content: '🛸';
+    position: fixed;
+    bottom: 4rem;
+    right: 2rem;
+    font-size: 1.5rem;
+    animation: ufo-fly 6s ease-in-out infinite;
+    z-index: 50;
+    pointer-events: none;
+}
+
+[data-theme="space"] .footer::after {
+    content: '⭐';
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.4rem;
+    animation: star-spin 3s ease-in-out infinite;
+    z-index: 50;
+    pointer-events: none;
+}
+
+@keyframes planet-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes ufo-fly {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(-15px) translateY(-8px); }
+    50% { transform: translateX(5px) translateY(-15px); }
+    75% { transform: translateX(15px) translateY(-5px); }
+}
+
+@keyframes star-spin {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.3) rotate(180deg); opacity: 0.7; }
+}

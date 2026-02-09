@@ -23,7 +23,7 @@ import { Companies, JobsTable } from './components/pages';
  * - Theme toggling
  */
 function App() {
-  const availableThemes = ['lite', 'dark', 'neon80s', 'suede', 'meow'];
+  const availableThemes = ['lite', 'dark', 'neon80s', 'suede', 'meow', 'space'];
   const normalizeTheme = (value) => {
     if (availableThemes.includes(value)) return value;
     if (value === 'light') return 'lite';
@@ -152,6 +152,30 @@ function App() {
       '--shadow-md': '0 4px 8px rgba(59, 34, 24, 0.10)',
       '--shadow-lg': '0 10px 20px rgba(59, 34, 24, 0.12)',
       '--shadow-xl': '0 20px 30px rgba(59, 34, 24, 0.15)'
+    },
+    space: {
+      '--bg-primary': '#0B1A3B',
+      '--bg-secondary': '#112244',
+      '--bg-tertiary': '#162B52',
+      '--bg-elevated': '#142640',
+      '--bg-hover': '#1B3462',
+      '--text-primary': '#FFFFFF',
+      '--text-secondary': '#A8C4E6',
+      '--text-tertiary': '#6889B0',
+      '--border-primary': '#1E3A6E',
+      '--border-secondary': '#162B52',
+      '--accent-primary': '#00E5D0',
+      '--accent-secondary': '#3B8BFF',
+      '--accent-hover': '#00CCBA',
+      '--success': '#00E5D0',
+      '--warning': '#FF6B2B',
+      '--warning-bg': '#2A1A0A',
+      '--warning-text': '#FF9D6B',
+      '--danger': '#FF4757',
+      '--shadow-sm': '0 1px 3px rgba(0, 0, 0, 0.5)',
+      '--shadow-md': '0 4px 8px rgba(0, 0, 0, 0.6)',
+      '--shadow-lg': '0 10px 20px rgba(0, 0, 0, 0.65)',
+      '--shadow-xl': '0 20px 30px rgba(0, 0, 0, 0.7)'
     }
   };
 

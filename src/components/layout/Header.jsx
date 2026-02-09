@@ -11,7 +11,8 @@ function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, setT
     { id: 'dark', label: 'Dark' },
     { id: 'neon80s', label: '80s' },
     { id: 'suede', label: 'Suede' },
-    { id: 'meow', label: 'Meow 🐱' }
+    { id: 'meow', label: 'Meow 🐱' },
+    { id: 'space', label: 'Space 🚀' }
   ];
 
   const daysSinceBackup = lastBackupTime
@@ -25,8 +26,8 @@ function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, setT
       <header className="header">
         <div className="header-content">
           <div className="logo">
-            <div className="theme-toggle">{theme === 'meow' ? '🐱' : '🎯'}</div>
-            <span>{theme === 'meow' ? 'Job Search Dashpurr 🐾' : 'Job Search Dashboard'}</span>
+            <div className="theme-toggle">{theme === 'meow' ? '🐱' : theme === 'space' ? '🚀' : '🎯'}</div>
+            <span>{theme === 'meow' ? 'Job Search Dashpurr 🐾' : theme === 'space' ? 'Job Search Launchpad' : 'Job Search Dashboard'}</span>
           </div>
           <div className="header-controls">
             <nav className="nav">
