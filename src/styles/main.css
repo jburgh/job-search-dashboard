@@ -1079,10 +1079,26 @@ body {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cellipse cx='14' cy='18' rx='5' ry='4' fill='%23D0621A'/%3E%3Ccircle cx='7.5' cy='11' r='2.5' fill='%23D0621A'/%3E%3Ccircle cx='20.5' cy='11' r='2.5' fill='%23D0621A'/%3E%3Ccircle cx='11.5' cy='8' r='2.2' fill='%23D0621A'/%3E%3Ccircle cx='16.5' cy='8' r='2.2' fill='%23D0621A'/%3E%3C/svg%3E") 14 14, pointer;
 }
 
-/* Paw print background pattern */
+/* Kawaii cat wallpaper background */
 [data-theme="meow"] .app {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg opacity='0.04'%3E%3Cellipse cx='40' cy='48' rx='8' ry='6' fill='%23E8792B'/%3E%3Ccircle cx='30' cy='37' r='3.5' fill='%23E8792B'/%3E%3Ccircle cx='50' cy='37' r='3.5' fill='%23E8792B'/%3E%3Ccircle cx='35' cy='32' r='3' fill='%23E8792B'/%3E%3Ccircle cx='45' cy='32' r='3' fill='%23E8792B'/%3E%3C/g%3E%3C/svg%3E");
+    background-image: url('../assets/kawaii-cats.svg');
     background-repeat: repeat;
+    background-size: 500px 500px;
+    position: relative;
+}
+
+[data-theme="meow"] .app::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 245, 235, 0.82);
+    z-index: 0;
+    pointer-events: none;
+}
+
+[data-theme="meow"] .app > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* Cat ears on the header */
@@ -1259,7 +1275,7 @@ body {
     pointer-events: none;
 }
 
-[data-theme="meow"] .app::before {
+[data-theme="meow"] .main::before {
     content: '🐟';
     position: fixed;
     bottom: 2rem;
@@ -1267,18 +1283,6 @@ body {
     font-size: 1.2rem;
     animation: fish-swim 4s ease-in-out infinite;
     z-index: 50;
-    pointer-events: none;
-}
-
-[data-theme="meow"] .main::before {
-    content: '🐾';
-    position: fixed;
-    bottom: 4.5rem;
-    right: 1.8rem;
-    font-size: 1rem;
-    animation: meow-float 2.5s ease-in-out infinite 0.5s;
-    z-index: 50;
-    opacity: 0.5;
     pointer-events: none;
 }
 
@@ -1302,6 +1306,18 @@ body {
     font-size: 1rem;
     animation: fish-swim 5s ease-in-out infinite 0.8s;
     z-index: 50;
+    pointer-events: none;
+}
+
+[data-theme="meow"] .header::after {
+    content: '🐾';
+    position: fixed;
+    bottom: 4.5rem;
+    right: 1.8rem;
+    font-size: 1rem;
+    animation: meow-float 2.5s ease-in-out infinite 0.5s;
+    z-index: 50;
+    opacity: 0.5;
     pointer-events: none;
 }
 
