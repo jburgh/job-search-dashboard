@@ -51,6 +51,7 @@ function App() {
   const [blockedCompanies, setBlockedCompanies] = useState([]);
   const [deletedCategories, setDeletedCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [disableJobModalAnimation, setDisableJobModalAnimation] = useState(false);
   const [showCompanyModal, setShowCompanyModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [editingJob, setEditingJob] = useState(null);
@@ -727,8 +728,17 @@ function App() {
             jobs={getSortedJobs()}
             filters={filters}
             setFilters={setFilters}
-            onAdd={() => { setEditingJob(null); setPrefillCompany(null); setShowModal(true); }}
-            onEdit={(job) => { setEditingJob(job); setShowModal(true); }}
+            onAdd={() => {
+              setEditingJob(null);
+              setPrefillCompany(null);
+              setDisableJobModalAnimation(false);
+              setShowModal(true);
+            }}
+            onEdit={(job, options = {}) => {
+              setEditingJob(job);
+              setDisableJobModalAnimation(Boolean(options.disableAnimation));
+              setShowModal(true);
+            }}
             onUpdateJob={updateJob}
             onDelete={deleteJob}
             onExport={exportCSV}
@@ -743,8 +753,14 @@ function App() {
         <JobModal
           job={editingJob}
           prefillCompany={prefillCompany}
+          disableAnimation={disableJobModalAnimation}
           onSave={editingJob?.id ? updateJob : addJob}
-          onClose={() => { setShowModal(false); setEditingJob(null); setPrefillCompany(null); }}
+          onClose={() => {
+            setShowModal(false);
+            setEditingJob(null);
+            setPrefillCompany(null);
+            setDisableJobModalAnimation(false);
+          }}
         />
       )}
 

@@ -10,8 +10,9 @@ import { CLOSE_REASONS } from '../../constants/closeReasons';
  * @param {Object} prefillCompany - Company object to prefill when adding from companies view (optional)
  * @param {Function} onSave - Callback when job is saved
  * @param {Function} onClose - Callback to close the modal
+ * @param {boolean} disableAnimation - Disable modal enter animation when true
  */
-function JobModal({ job, prefillCompany, onSave, onClose }) {
+function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = false }) {
   const [formData, setFormData] = useState(() => {
     const today = new Date().toISOString().split('T')[0];
     const defaults = {
@@ -69,8 +70,16 @@ function JobModal({ job, prefillCompany, onSave, onClose }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      style={disableAnimation ? { animation: 'none' } : undefined}
+    >
+      <div
+        className="modal"
+        onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: '700px', ...(disableAnimation ? { animation: 'none' } : {}) }}
+      >
         <div className="modal-header">
           <h2>{job?.id ? "Edit application" : "Add application"}</h2>
           <button className="modal-close" onClick={onClose}>×</button>

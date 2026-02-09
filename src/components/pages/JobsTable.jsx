@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBadge, PriorityBadge } from '../common';
 import { JOB_STATUSES } from '../../constants/jobStatuses';
 import { CLOSE_REASONS } from '../../constants/closeReasons';
@@ -40,24 +40,8 @@ function JobsTable({
   // View modal state
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [viewModalJob, setViewModalJob] = useState(null);
-  const [viewModalEdit, setViewModalEdit] = useState(false);
-  const [editedJobData, setEditedJobData] = useState(null);
-  const notesTextareaRef = useRef(null);
-
-  // Auto-expand textarea based on content
-  const autoExpandTextarea = () => {
-    if (notesTextareaRef.current) {
-      notesTextareaRef.current.style.height = 'auto';
-      notesTextareaRef.current.style.height = Math.max(notesTextareaRef.current.scrollHeight, 120) + 'px';
-    }
-  };
-
-  useEffect(() => {
-    autoExpandTextarea();
-  }, [viewModalJob, editedJobData, viewModalEdit]);
-
   // Read-only styling for view mode fields in job modal
-  const viewFieldStyle = viewModalEdit ? {} : {
+  const viewFieldStyle = {
     background: 'var(--bg-tertiary)',
     border: '1px dashed var(--border-primary)',
     color: 'var(--text-secondary)',
@@ -869,7 +853,6 @@ function JobsTable({
                           onClick={() => {
                             setViewModalJob(job);
                             setViewModalOpen(true);
-                            setViewModalEdit(false);
                           }}
                         >
                           <span role="img" aria-label="View">👁️</span>
@@ -1078,62 +1061,73 @@ function JobsTable({
             <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2>Application details</h2>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                {viewModalEdit ? (
-                  <button
-                    className="btn"
-                    onClick={() => {
-                      onUpdateJob(editedJobData);
-                      setViewModalOpen(false);
-                      setViewModalEdit(false);
-                      setEditedJobData(null);
-                    }}
-                  >
-                    Save & close
-                  </button>
-                ) : (
-                  <button className="icon-btn" title="Edit" style={{
+                <button
+                  className="icon-btn"
+                  title="Edit"
+                  style={{
                     background: 'var(--bg-tertiary)',
                     border: '1px solid var(--border-primary)',
-                    width: '32px', height: '32px', borderRadius: '6px', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-secondary)', fontSize: '1.1rem'
-                  }} onClick={() => {
-                    if (!viewModalEdit) {
-                      setEditedJobData({ ...viewModalJob });
-                    }
-                    setViewModalEdit(true);
-                  }}>
-                    <span role="img" aria-label="Edit">✏️</span>
-                  </button>
-                )}
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--text-secondary)',
+                    fontSize: '1.1rem'
+                  }}
+                  onClick={() => {
+                    onEdit(viewModalJob, { disableAnimation: true });
+                    setViewModalOpen(false);
+                  }}
+                >
+                  <span role="img" aria-label="Edit">✏️</span>
+                </button>
                 <button className="modal-close" onClick={() => setViewModalOpen(false)}>×</button>
               </div>
             </div>
             <div className="modal-body">
               {viewModalJob ? (
                 <div style={{ borderBottom: '1px solid var(--border-primary)', marginBottom: '1.5rem', paddingBottom: '1.5rem' }}>
-                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '0.5rem' }}>{viewModalEdit ? editedJobData?.role : viewModalJob.role} @ {viewModalEdit ? editedJobData?.company : viewModalJob.company}</h3>
+                  <h3 style={{ color: 'var(--accent-primary)', marginBottom: '0.5rem' }}>{viewModalJob.role} @ {viewModalJob.company}</h3>
                   <div className="form-row">
                     <div className="form-group">
                       <label>Company</label>
-                      <input type="text" value={viewModalEdit ? editedJobData?.company || '' : viewModalJob.company} readOnly={!viewModalEdit} onChange={e => {
-                        setEditedJobData({ ...editedJobData, company: e.target.value });
-                      }} style={viewFieldStyle} />
+                      <input type="text" value={viewModalJob.company} readOnly style={viewFieldStyle} />
                     </div>
                     <div className="form-group">
                       <label>Role</label>
-                      <input type="text" value={viewModalEdit ? editedJobData?.role || '' : viewModalJob.role} readOnly={!viewModalEdit} onChange={e => {
-                        setEditedJobData({ ...editedJobData, role: e.target.value });
-                      }} style={viewFieldStyle} />
+                      <input type="text" value={viewModalJob.role} readOnly style={viewFieldStyle} />
                     </div>
                   </div>
                   <div className="form-group">
                     <label>Job URL</label>
-                    {viewModalEdit ? (
-                      <input type="url" value={editedJobData?.url || ''} onChange={e => {
-                        setEditedJobData({ ...editedJobData, url: e.target.value });
-                      }} />
+                    {viewModalJob.url ? (
+                      <div style={{
+                        ...viewFieldStyle,
+                        cursor: 'default',
+                        padding: '0.75rem',
+                        wordBreak: 'break-all'
+                      }}>
+                        <a
+                          href={viewModalJob.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {viewModalJob.url}
+                        </a>
+                      </div>
                     ) : (
-                      viewModalJob.url ? (
+                      <div style={viewFieldStyle}>-</div>
+                    )}
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Resume URL</label>
+                      {viewModalJob.resumeUrl ? (
                         <div style={{
                           ...viewFieldStyle,
                           cursor: 'default',
@@ -1141,177 +1135,101 @@ function JobsTable({
                           wordBreak: 'break-all'
                         }}>
                           <a
-                            href={viewModalJob.url}
+                            href={viewModalJob.resumeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
                             onClick={(e) => e.stopPropagation()}
                           >
-                            {viewModalJob.url}
+                            {viewModalJob.resumeUrl}
                           </a>
                         </div>
                       ) : (
                         <div style={viewFieldStyle}>-</div>
-                      )
-                    )}
-                  </div>
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>Resume URL</label>
-                      {viewModalEdit ? (
-                        <input type="url" value={editedJobData?.resumeUrl || ''} onChange={e => {
-                          setEditedJobData({ ...editedJobData, resumeUrl: e.target.value });
-                        }} />
-                      ) : (
-                        viewModalJob.resumeUrl ? (
-                          <div style={{
-                            ...viewFieldStyle,
-                            cursor: 'default',
-                            padding: '0.75rem',
-                            wordBreak: 'break-all'
-                          }}>
-                            <a
-                              href={viewModalJob.resumeUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {viewModalJob.resumeUrl}
-                            </a>
-                          </div>
-                        ) : (
-                          <div style={viewFieldStyle}>-</div>
-                        )
                       )}
                     </div>
                     <div className="form-group">
                       <label>Cover letter URL</label>
-                      {viewModalEdit ? (
-                        <input type="url" value={editedJobData?.coverLetterUrl || ''} onChange={e => {
-                          setEditedJobData({ ...editedJobData, coverLetterUrl: e.target.value });
-                        }} />
+                      {viewModalJob.coverLetterUrl ? (
+                        <div style={{
+                          ...viewFieldStyle,
+                          cursor: 'default',
+                          padding: '0.75rem',
+                          wordBreak: 'break-all'
+                        }}>
+                          <a
+                            href={viewModalJob.coverLetterUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {viewModalJob.coverLetterUrl}
+                          </a>
+                        </div>
                       ) : (
-                        viewModalJob.coverLetterUrl ? (
-                          <div style={{
-                            ...viewFieldStyle,
-                            cursor: 'default',
-                            padding: '0.75rem',
-                            wordBreak: 'break-all'
-                          }}>
-                            <a
-                              href={viewModalJob.coverLetterUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {viewModalJob.coverLetterUrl}
-                            </a>
-                          </div>
-                        ) : (
-                          <div style={viewFieldStyle}>-</div>
-                        )
+                        <div style={viewFieldStyle}>-</div>
                       )}
                     </div>
                   </div>
                   <div className="form-row">
                     <div className="form-group">
                       <label>Status</label>
-                      <input type="text" value={viewModalEdit ? editedJobData?.status || '' : viewModalJob.status || ''} readOnly={!viewModalEdit} onChange={e => {
-                        setEditedJobData({ ...editedJobData, status: e.target.value });
-                      }} style={viewFieldStyle} />
+                      <input type="text" value={viewModalJob.status || ''} readOnly style={viewFieldStyle} />
                     </div>
                     <div className="form-group">
                       <label>Date applied</label>
-                      <input type="date" value={viewModalEdit ? editedJobData?.dateApplied || '' : viewModalJob.dateApplied || ''} readOnly={!viewModalEdit} onChange={e => {
-                        setEditedJobData({ ...editedJobData, dateApplied: e.target.value });
-                      }} style={viewFieldStyle} />
+                      <input type="date" value={viewModalJob.dateApplied || ''} readOnly style={viewFieldStyle} />
                     </div>
                   </div>
                   <div className="form-row">
                     <div className="form-group">
                       <label>Progression</label>
-                      <input type="text" value={viewModalEdit ? editedJobData?.progression || '' : viewModalJob.progression || ''} readOnly={!viewModalEdit} onChange={e => {
-                        setEditedJobData({ ...editedJobData, progression: e.target.value });
-                      }} style={viewFieldStyle} />
+                      <input type="text" value={viewModalJob.progression || ''} readOnly style={viewFieldStyle} />
                     </div>
                     <div className="form-group">
                       <label>Priority</label>
-                      <input type="text" value={viewModalEdit ? editedJobData?.priority || '' : viewModalJob.priority || ''} readOnly={!viewModalEdit} onChange={e => {
-                        setEditedJobData({ ...editedJobData, priority: e.target.value });
-                      }} style={viewFieldStyle} />
+                      <input type="text" value={viewModalJob.priority || ''} readOnly style={viewFieldStyle} />
                     </div>
                   </div>
                   {(viewModalJob.closeReason || viewModalJob.followUp) && (
                     <div className="form-row">
                       <div className="form-group">
                         <label>Close reason</label>
-                        <input type="text" value={viewModalEdit ? editedJobData?.closeReason || '' : viewModalJob.closeReason || ''} readOnly={!viewModalEdit} onChange={e => {
-                          setEditedJobData({ ...editedJobData, closeReason: e.target.value });
-                        }} style={viewFieldStyle} />
+                        <input type="text" value={viewModalJob.closeReason || ''} readOnly style={viewFieldStyle} />
                       </div>
                       <div className="form-group">
                         <label>Close date</label>
-                        <input type="date" value={viewModalEdit ? editedJobData?.followUp || '' : viewModalJob.followUp || ''} readOnly={!viewModalEdit} onChange={e => {
-                          setEditedJobData({ ...editedJobData, followUp: e.target.value });
-                        }} style={viewFieldStyle} />
+                        <input type="date" value={viewModalJob.followUp || ''} readOnly style={viewFieldStyle} />
                       </div>
                     </div>
                   )}
                   <div className="form-row">
                     <div className="form-group">
                       <label>Salary</label>
-                      <input type="text" value={viewModalEdit ? editedJobData?.salary || '' : viewModalJob.salary || ''} readOnly={!viewModalEdit} onChange={e => {
-                        setEditedJobData({ ...editedJobData, salary: e.target.value });
-                      }} style={viewFieldStyle} />
+                      <input type="text" value={viewModalJob.salary || ''} readOnly style={viewFieldStyle} />
                     </div>
                     <div className="form-group">
                       <label>Location</label>
-                      <input type="text" value={viewModalEdit ? editedJobData?.location || '' : viewModalJob.location || ''} readOnly={!viewModalEdit} onChange={e => {
-                        setEditedJobData({ ...editedJobData, location: e.target.value });
-                      }} style={viewFieldStyle} />
+                      <input type="text" value={viewModalJob.location || ''} readOnly style={viewFieldStyle} />
                     </div>
                   </div>
                   <div className="form-group">
                     <label>Contact name</label>
-                    <input type="text" value={viewModalEdit ? editedJobData?.contact || '' : viewModalJob.contact || ''} readOnly={!viewModalEdit} onChange={e => {
-                      setEditedJobData({ ...editedJobData, contact: e.target.value });
-                    }} style={viewFieldStyle} />
+                    <input type="text" value={viewModalJob.contact || ''} readOnly style={viewFieldStyle} />
                   </div>
                   <div className="form-group">
                     <label>Notes</label>
-                    {viewModalEdit ? (
-                      <textarea value={editedJobData?.notes || ''} onChange={e => {
-                        setEditedJobData({ ...editedJobData, notes: e.target.value });
-                        autoExpandTextarea();
-                      }} ref={notesTextareaRef} style={{ minHeight: '120px', resize: 'vertical', overflow: 'hidden' }} />
-                    ) : (
-                      <div style={{
-                        ...viewFieldStyle,
-                        cursor: 'default',
-                        minHeight: '120px',
-                        padding: '0.75rem',
-                        whiteSpace: 'pre-wrap',
-                        wordBreak: 'break-word'
-                      }} dangerouslySetInnerHTML={{ __html: viewModalJob.notes ? UIUtil.linkify(viewModalJob.notes) : '-' }}>
-                      </div>
-                    )}
-                  </div>
-                  {viewModalEdit && (
-                    <div className="modal-footer" style={{ marginTop: '1.5rem', borderTop: '1px solid var(--border-primary)', paddingTop: '1.5rem', display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
-                      <button className="btn btn-secondary" onClick={() => {
-                        setViewModalEdit(false);
-                        setEditedJobData(null);
-                      }}>Cancel</button>
-                      <button className="btn" onClick={() => {
-                        onUpdateJob(editedJobData);
-                        setViewModalOpen(false);
-                        setViewModalEdit(false);
-                        setEditedJobData(null);
-                      }}>Save & Close</button>
+                    <div style={{
+                      ...viewFieldStyle,
+                      cursor: 'default',
+                      minHeight: '120px',
+                      padding: '0.75rem',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word'
+                    }} dangerouslySetInnerHTML={{ __html: viewModalJob.notes ? UIUtil.linkify(viewModalJob.notes) : '-' }}>
                     </div>
-                  )}
+                  </div>
                 </div>
               ) : (
                 <div>No job found.</div>
