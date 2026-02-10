@@ -342,17 +342,27 @@ function App() {
     container.style.cssText = 'position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9999';
     document.body.appendChild(container);
 
+    const isMeow = theme === 'meow';
+    const catEmojis = ['😺', '😸', '😻', '🐱', '😽', '🐾', '🐟'];
     const colors = ['#6b8aff', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
-    const total = 36;
+    const total = isMeow ? 28 : 36;
 
     for (let i = 0; i < total; i++) {
       const piece = document.createElement('div');
-      const width = 6 + Math.random() * 6;
-      const height = width * (1.4 + Math.random() * 0.6);
       const startLeft = Math.random() * 100;
       const rotateStart = Math.random() * 360;
 
-      piece.style.cssText = `position:absolute;top:-16px;left:${startLeft}%;width:${width}px;height:${height}px;background:${colors[i % colors.length]};opacity:1;border-radius:2px;transform:translate3d(0,0,0) rotate(${rotateStart}deg);mix-blend-mode:screen;`;
+      if (isMeow) {
+        const emoji = catEmojis[i % catEmojis.length];
+        const size = 24 + Math.random() * 24;
+        piece.textContent = emoji;
+        piece.style.cssText = `position:absolute;top:-30px;left:${startLeft}%;font-size:${size}px;line-height:1;transform:translate3d(0,0,0) rotate(${rotateStart}deg);`;
+      } else {
+        const width = 6 + Math.random() * 6;
+        const height = width * (1.4 + Math.random() * 0.6);
+        piece.style.cssText = `position:absolute;top:-16px;left:${startLeft}%;width:${width}px;height:${height}px;background:${colors[i % colors.length]};opacity:1;border-radius:2px;transform:translate3d(0,0,0) rotate(${rotateStart}deg);mix-blend-mode:screen;`;
+      }
+
       container.appendChild(piece);
 
       const xOffset = (Math.random() - 0.5) * 220;

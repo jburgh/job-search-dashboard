@@ -1066,7 +1066,7 @@ body {
 /* Paw print cursor */
 [data-theme="meow"],
 [data-theme="meow"] * {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='16' rx='4.5' ry='3.5' fill='%23E8792B'/%3E%3Ccircle cx='6.5' cy='10' r='2.2' fill='%23E8792B'/%3E%3Ccircle cx='17.5' cy='10' r='2.2' fill='%23E8792B'/%3E%3Ccircle cx='10' cy='7.5' r='2' fill='%23E8792B'/%3E%3Ccircle cx='14' cy='7.5' r='2' fill='%23E8792B'/%3E%3C/svg%3E") 12 12, auto;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cellipse cx='14' cy='18' rx='5' ry='4' fill='%23E8792B'/%3E%3Ccircle cx='7.5' cy='11' r='2.5' fill='%23E8792B'/%3E%3Ccircle cx='20.5' cy='11' r='2.5' fill='%23E8792B'/%3E%3Ccircle cx='11.5' cy='8' r='2.2' fill='%23E8792B'/%3E%3Ccircle cx='16.5' cy='8' r='2.2' fill='%23E8792B'/%3E%3C/svg%3E") 14 14, auto;
 }
 
 [data-theme="meow"] button,
@@ -1076,7 +1076,7 @@ body {
 [data-theme="meow"] .nav-btn,
 [data-theme="meow"] .theme-toggle,
 [data-theme="meow"] .theme-select {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cellipse cx='14' cy='18' rx='5' ry='4' fill='%23D0621A'/%3E%3Ccircle cx='7.5' cy='11' r='2.5' fill='%23D0621A'/%3E%3Ccircle cx='20.5' cy='11' r='2.5' fill='%23D0621A'/%3E%3Ccircle cx='11.5' cy='8' r='2.2' fill='%23D0621A'/%3E%3Ccircle cx='16.5' cy='8' r='2.2' fill='%23D0621A'/%3E%3C/svg%3E") 14 14, pointer;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'%3E%3Cellipse cx='17' cy='22' rx='6' ry='5' fill='%23D0621A'/%3E%3Ccircle cx='9' cy='13.5' r='3' fill='%23D0621A'/%3E%3Ccircle cx='25' cy='13.5' r='3' fill='%23D0621A'/%3E%3Ccircle cx='14' cy='9.5' r='2.7' fill='%23D0621A'/%3E%3Ccircle cx='20' cy='9.5' r='2.7' fill='%23D0621A'/%3E%3C/svg%3E") 17 17, pointer;
 }
 
 /* Kawaii cat wallpaper background */
