@@ -1252,7 +1252,7 @@ body {
     display: none;
 }
 
-[data-theme="meow"] .modal-content {
+[data-theme="meow"] .modal {
     border-radius: 20px;
     border: 2px solid var(--accent-secondary);
 }
@@ -1421,11 +1421,11 @@ body {
     transition: all 0.3s ease;
 }
 
-[data-theme="neon80s"] .modal-content {
+[data-theme="neon80s"] .modal {
     background: rgba(36, 23, 52, 0.95);
     backdrop-filter: blur(10px);
-    border: 1px solid #2e2157;
-    box-shadow: 0 0 30px rgba(246, 1, 157, 0.15), 0 10px 40px rgba(0, 0, 0, 0.5);
+    border: 2px solid #f6019d;
+    box-shadow: 0 0 30px rgba(246, 1, 157, 0.25), 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 [data-theme="neon80s"] .stat-card:hover {
@@ -1578,9 +1578,9 @@ body {
 }
 
 [data-theme="space"] .nav-btn:hover:not(.active) {
-    background: rgba(59, 139, 255, 0.15);
-    color: #3B8BFF;
-    text-shadow: 0 0 8px rgba(59, 139, 255, 0.5);
+    background: rgba(255, 107, 43, 0.15);
+    color: #FF6B2B;
+    text-shadow: 0 0 8px rgba(255, 107, 43, 0.5);
 }
 
 /* Active nav button — starburst glow */
@@ -1608,18 +1608,22 @@ body {
     transition: all 0.3s ease;
 }
 
+[data-theme="space"] .stat-card::before {
+    background: linear-gradient(90deg, #FF6B2B, #00E5D0);
+}
+
 [data-theme="space"] .stat-card:hover {
-    border-color: #00E5D0;
+    border-color: #FF6B2B;
     box-shadow:
-        0 0 12px rgba(0, 229, 208, 0.25),
+        0 0 12px rgba(255, 107, 43, 0.3),
         0 4px 16px rgba(0, 0, 0, 0.4);
     transform: translateY(-3px);
 }
 
 [data-theme="space"] .chart-card:hover {
-    border-color: #3B8BFF;
+    border-color: #FF6B2B;
     box-shadow:
-        0 0 12px rgba(59, 139, 255, 0.25),
+        0 0 12px rgba(255, 107, 43, 0.3),
         0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
@@ -1658,8 +1662,8 @@ body {
 
 [data-theme="space"] .theme-select:hover,
 [data-theme="space"] .theme-select:focus {
-    border-color: #00E5D0;
-    box-shadow: 0 0 8px rgba(0, 229, 208, 0.3);
+    border-color: #FF6B2B;
+    box-shadow: 0 0 8px rgba(255, 107, 43, 0.3);
 }
 
 /* Table gets space treatment */
@@ -1676,8 +1680,8 @@ body {
 }
 
 [data-theme="space"] .table tbody tr:hover {
-    background: rgba(0, 229, 208, 0.06);
-    box-shadow: inset 3px 0 0 #00E5D0;
+    background: rgba(59, 139, 255, 0.08);
+    box-shadow: inset 3px 0 0 #FF6B2B;
 }
 
 /* Modals — no scrollbar flash */
@@ -1690,10 +1694,10 @@ body {
 }
 
 /* Modal glow border */
-[data-theme="space"] .modal-content {
-    border: 2px solid #1E3A6E;
+[data-theme="space"] .modal {
+    border: 2px solid #FF6B2B;
     border-radius: 16px;
-    box-shadow: 0 0 30px rgba(0, 229, 208, 0.1), 0 10px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Scrollbar — space style */
@@ -1711,7 +1715,7 @@ body {
 }
 
 [data-theme="space"] ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(#00CCBA, #2B7BEF);
+    background: linear-gradient(#FF6B2B, #FF9D5C);
 }
 
 /* Selection color */
