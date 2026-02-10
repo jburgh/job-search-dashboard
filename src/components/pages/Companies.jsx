@@ -908,9 +908,9 @@ function Companies({
                         aria-label={`Fit level: ${getFitLevelLabel(company.fitLevel || null)}`}
                       >
                         <option value="—">—</option>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
+                        <option value="Strong">Strong</option>
+                        <option value="Decent">Decent</option>
+                        <option value="Long shot">Long shot</option>
                       </select>
                     </td>
                     <td>

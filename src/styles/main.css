@@ -1304,17 +1304,6 @@ body {
     pointer-events: none;
 }
 
-[data-theme="meow"] .header::after {
-    content: '🐾';
-    position: fixed;
-    bottom: 4.5rem;
-    right: 1.8rem;
-    font-size: 1rem;
-    animation: meow-float 2.5s ease-in-out infinite 0.5s;
-    z-index: 50;
-    opacity: 0.5;
-    pointer-events: none;
-}
 
 @keyframes meow-float {
     0%, 100% { transform: translateY(0) rotate(0deg); }

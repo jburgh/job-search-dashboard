@@ -9,8 +9,8 @@ function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, setT
   const themeOptions = [
     { id: 'lite', label: 'Lite' },
     { id: 'dark', label: 'Dark' },
-    { id: 'neon80s', label: '80s' },
     { id: 'suede', label: 'Suede' },
+    { id: 'neon80s', label: '80s 👨‍🎤' },
     { id: 'meow', label: 'Meow 🐱' },
     { id: 'space', label: 'Space 🚀' }
   ];
