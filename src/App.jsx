@@ -888,7 +888,7 @@ function App() {
       {showUpdateBanner && (
         <UpdateBanner
           onDismiss={dismissBanner}
-          onRefresh={refreshPage}
+          onBackupAndRefresh={() => { exportBackup(); refreshPage(); }}
           commitsUrl={APP_CONFIG.GITHUB_COMMITS_URL}
         />
       )}

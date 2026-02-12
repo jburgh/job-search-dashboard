@@ -4,12 +4,12 @@ import React from 'react';
  * Update notification banner
  * Displayed when a new version of the app is available
  */
-const UpdateBanner = ({ onDismiss, onRefresh, commitsUrl }) => {
+const UpdateBanner = ({ onDismiss, onBackupAndRefresh, commitsUrl }) => {
   return (
     <div className="update-banner">
       <div className="update-banner-content">
         <span className="update-banner-icon">&#10024;</span>
-        <span>New updates available! Refresh to get the latest features.</span>
+        <span>New updates available! Back up your data before refreshing.</span>
         <a
           href={commitsUrl}
           target="_blank"
@@ -28,9 +28,9 @@ const UpdateBanner = ({ onDismiss, onRefresh, commitsUrl }) => {
         </button>
         <button
           className="update-banner-btn update-banner-btn-refresh"
-          onClick={onRefresh}
+          onClick={onBackupAndRefresh}
         >
-          Refresh
+          Back up & refresh
         </button>
       </div>
     </div>
