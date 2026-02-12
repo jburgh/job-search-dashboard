@@ -236,6 +236,18 @@ function Companies({
     return 0;
   });
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+  const totalPages = Math.ceil(sortedCompaniesList.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedCompaniesList = sortedCompaniesList.slice(startIndex, startIndex + itemsPerPage);
+
+  // Reset to first page when filters or sorting change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategories.length, selectedFitLevels.length, appliedFilter, showHidden, sortConfig.key, sortConfig.direction]);
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -288,7 +300,7 @@ function Companies({
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem", flexWrap: "wrap", gap: "1rem" }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <h1 style={{ color: "var(--accent-primary)", fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: "1.75rem" }}>Target companies</h1>
-          <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginLeft: "0.5rem" }}>
+          <span className="heading-count">
             {filteredCompaniesList.length} {filteredCompaniesList.length === 1 ? 'company' : 'companies'}
           </span>
           {selectedCompanies.length > 0 && (
@@ -803,179 +815,268 @@ function Companies({
           <p>Try adjusting your search</p>
         </div>
       ) : (
-        <div className="table-container">
-          <table className="table">
-            <thead>
-              <tr>
-                <th style={{ width: '40px' }}>
-                  <input
-                    type="checkbox"
-                    checked={selectedCompanies.length === sortedCompaniesList.length && sortedCompaniesList.length > 0}
-                    onChange={(e) => e.target.checked ? handleSelectAll() : handleDeselectAll()}
-                    style={{ cursor: 'pointer' }}
-                    title={selectedCompanies.length === sortedCompaniesList.length ? 'Deselect all' : 'Select all'}
-                  />
-                </th>
-                <th onClick={() => requestSort('company')} style={{ cursor: 'pointer' }}>
-                  Company{getSortIcon('company')}
-                </th>
-                <th onClick={() => requestSort('category')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  Category{getSortIcon('category')}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowCategoryManager(true);
-                    }}
-                    title="Manage categories"
-                    aria-label="Manage categories"
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--text-secondary)',
-                      cursor: 'pointer',
-                      fontSize: '1rem',
-                      padding: '0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      transition: 'color 0.2s'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent-primary)'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
-                  >
-                    ⚙️
-                  </button>
-                </th>
-                <th onClick={() => requestSort('fitLevel')} style={{ cursor: 'pointer' }} title="Fit level reflects how well this company tends to match your goals based on role availability, location, hiring patterns, or past experience. It's subjective and can change over time.">
-                  Fit level{getSortIcon('fitLevel')}
-                </th>
-                <th onClick={() => requestSort('applications')} style={{ cursor: 'pointer' }}>
-                  Applications{getSortIcon('applications')}
-                </th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedCompaniesList.map(company => {
-                const isHidden = blockedNameSet.has((company?.name || '').trim().toLowerCase());
-                const companyCategory = findCompanyCategory(company.name) || 'None';
+        <>
+          <div className="table-container">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th style={{ width: '40px' }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedCompanies.length === sortedCompaniesList.length && sortedCompaniesList.length > 0}
+                      onChange={(e) => e.target.checked ? handleSelectAll() : handleDeselectAll()}
+                      style={{ cursor: 'pointer' }}
+                      title={selectedCompanies.length === sortedCompaniesList.length ? 'Deselect all' : 'Select all'}
+                    />
+                  </th>
+                  <th onClick={() => requestSort('company')} style={{ cursor: 'pointer' }}>
+                    Company{getSortIcon('company')}
+                  </th>
+                  <th onClick={() => requestSort('category')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    Category{getSortIcon('category')}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowCategoryManager(true);
+                      }}
+                      title="Manage categories"
+                      aria-label="Manage categories"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--text-secondary)',
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                        padding: '0',
+                        display: 'flex',
+                        alignItems: 'center',
+                        transition: 'color 0.2s'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent-primary)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                    >
+                      ⚙️
+                    </button>
+                  </th>
+                  <th onClick={() => requestSort('fitLevel')} style={{ cursor: 'pointer' }} title="Fit level reflects how well this company tends to match your goals based on role availability, location, hiring patterns, or past experience. It's subjective and can change over time.">
+                    Fit level{getSortIcon('fitLevel')}
+                  </th>
+                  <th onClick={() => requestSort('applications')} style={{ cursor: 'pointer' }}>
+                    Applications{getSortIcon('applications')}
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedCompaniesList.map(company => {
+                  const isHidden = blockedNameSet.has((company?.name || '').trim().toLowerCase());
+                  const companyCategory = findCompanyCategory(company.name) || 'None';
 
-                return (
-                  <tr key={company.name} style={isHidden ? { opacity: 0.6, background: 'var(--bg-tertiary)' } : {}}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedCompanies.includes(company.name)}
-                        onChange={() => handleToggleCompany(company.name)}
-                        style={{ cursor: 'pointer' }}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    </td>
-                    <td>
-                      <a href={company.url} target="_blank" rel="noopener noreferrer" className="link">
-                        {company.name}&nbsp;<span style={{ fontSize: '0.85em', marginLeft: '0.25rem' }}>↗</span>
-                      </a>
-                    </td>
-                    <td>
-                      <span
-                        className={getCategoryClassName(companyCategory)}
-                        onClick={() => setSelectedCategories([companyCategory])}
-                        style={{
-                          cursor: 'pointer',
-                          transition: 'opacity 0.2s'
-                        }}
-                        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
-                        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
-                        title={`Filter by ${companyCategory}`}
-                      >
-                        {companyCategory}
-                      </span>
-                    </td>
-                    <td>
-                      <select
-                        value={getFitLevelLabel(company.fitLevel || null)}
-                        onChange={(e) => handleFitLevelChange(company.name, getFitLevelValue(e.target.value))}
-                        style={{
-                          background: 'var(--bg-tertiary)',
-                          color: 'var(--text-primary)',
-                          border: '1px solid var(--border-primary)',
-                          padding: '0.375rem 0.5rem',
-                          borderRadius: '6px',
-                          fontSize: '0.875rem',
-                          cursor: 'pointer',
-                          fontWeight: company.fitLevel === 3 ? '600' : company.fitLevel === 1 ? '400' : '500',
-                          opacity: company.fitLevel === 1 ? 0.7 : 1
-                        }}
-                        aria-label={`Fit level: ${getFitLevelLabel(company.fitLevel || null)}`}
-                      >
-                        <option value="—">—</option>
-                        <option value="Strong">Strong</option>
-                        <option value="Decent">Decent</option>
-                        <option value="Long shot">Long shot</option>
-                      </select>
-                    </td>
-                    <td>
-                      {jobs.filter(j => j.company === company.name).length > 0 ? (
-                        <button
-                          onClick={() => onViewCompanyJobs(company.name)}
+                  return (
+                    <tr key={company.name} style={isHidden ? { opacity: 0.6, background: 'var(--bg-tertiary)' } : {}}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedCompanies.includes(company.name)}
+                          onChange={() => handleToggleCompany(company.name)}
+                          style={{ cursor: 'pointer' }}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </td>
+                      <td>
+                        <a href={company.url} target="_blank" rel="noopener noreferrer" className="link">
+                          {company.name}&nbsp;<span style={{ fontSize: '0.85em', marginLeft: '0.25rem' }}>↗</span>
+                        </a>
+                      </td>
+                      <td>
+                        <span
+                          className={getCategoryClassName(companyCategory)}
+                          onClick={() => setSelectedCategories([companyCategory])}
                           style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#6b8aff',
                             cursor: 'pointer',
-                            textDecoration: 'underline',
-                            fontSize: 'inherit',
-                            padding: 0
+                            transition: 'opacity 0.2s'
                           }}
+                          onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                          onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                          title={`Filter by ${companyCategory}`}
                         >
-                          {jobs.filter(j => j.company === company.name).length}
-                        </button>
-                      ) : (
-                        <span style={{ color: '#6b7280' }}>0</span>
-                      )}
-                    </td>
-                    <td>
-                      {isHidden ? (
-                        <button
-                          className="btn btn-sm"
-                          onClick={() => onUnhideCompany(company.name)}
-                          style={{ marginRight: '0.5rem' }}
+                          {companyCategory}
+                        </span>
+                      </td>
+                      <td>
+                        <select
+                          value={getFitLevelLabel(company.fitLevel || null)}
+                          onChange={(e) => handleFitLevelChange(company.name, getFitLevelValue(e.target.value))}
+                          style={{
+                            background: 'var(--bg-tertiary)',
+                            color: 'var(--text-primary)',
+                            border: '1px solid var(--border-primary)',
+                            padding: '0.375rem 0.5rem',
+                            borderRadius: '6px',
+                            fontSize: '0.875rem',
+                            cursor: 'pointer',
+                            fontWeight: company.fitLevel === 3 ? '600' : company.fitLevel === 1 ? '400' : '500',
+                            opacity: company.fitLevel === 1 ? 0.7 : 1
+                          }}
+                          aria-label={`Fit level: ${getFitLevelLabel(company.fitLevel || null)}`}
                         >
-                          Unhide
-                        </button>
-                      ) : (
-                        <>
-                          <button className="btn btn-sm" onClick={() => onAddJob(company)} style={{ marginRight: '0.5rem' }}>
-                            Add application
-                          </button>
+                          <option value="—">—</option>
+                          <option value="Strong">Strong</option>
+                          <option value="Decent">Decent</option>
+                          <option value="Long shot">Long shot</option>
+                        </select>
+                      </td>
+                      <td>
+                        {jobs.filter(j => j.company === company.name).length > 0 ? (
                           <button
-                            className="btn btn-sm btn-secondary"
-                            onClick={() => {
-                              if (confirm(`Hide ${company.name} from this list?`)) {
-                                onDeleteCompany(company.name);
-                              }
+                            onClick={() => onViewCompanyJobs(company.name)}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#6b8aff',
+                              cursor: 'pointer',
+                              textDecoration: 'underline',
+                              fontSize: 'inherit',
+                              padding: 0
                             }}
+                          >
+                            {jobs.filter(j => j.company === company.name).length}
+                          </button>
+                        ) : (
+                          <span style={{ color: '#6b7280' }}>0</span>
+                        )}
+                      </td>
+                      <td>
+                        {isHidden ? (
+                          <button
+                            className="btn btn-sm"
+                            onClick={() => onUnhideCompany(company.name)}
                             style={{ marginRight: '0.5rem' }}
                           >
-                            Hide
+                            Unhide
                           </button>
-                        </>
-                      )}
-                      <button className="btn btn-sm btn-secondary" onClick={() => {
-                        setEditingCompany(company);
-                        setEditUrl(company.url);
-                        setEditCompanyName(company.name);
-                        setEditCategory(companyCategory);
-                        setEditNewCategory('');
-                      }}>
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                        ) : (
+                          <>
+                            <button className="btn btn-sm" onClick={() => onAddJob(company)} style={{ marginRight: '0.5rem' }}>
+                              Add application
+                            </button>
+                            <button
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => {
+                                if (confirm(`Hide ${company.name} from this list?`)) {
+                                  onDeleteCompany(company.name);
+                                }
+                              }}
+                              style={{ marginRight: '0.5rem' }}
+                            >
+                              Hide
+                            </button>
+                          </>
+                        )}
+                        <button className="btn btn-sm btn-secondary" onClick={() => {
+                          setEditingCompany(company);
+                          setEditUrl(company.url);
+                          setEditCompanyName(company.name);
+                          setEditCategory(companyCategory);
+                          setEditNewCategory('');
+                        }}>
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {totalPages > 1 && (
+            <div style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "0.5rem",
+              marginTop: "2rem",
+              padding: "1rem"
+            }}>
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+                style={{
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-primary)",
+                  color: "var(--text-primary)",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "8px",
+                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                  fontSize: "0.9rem",
+                  transition: "all 0.2s ease",
+                  opacity: currentPage === 1 ? 0.4 : 1
+                }}
+              >
+                ««
+              </button>
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                style={{
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-primary)",
+                  color: "var(--text-primary)",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "8px",
+                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                  fontSize: "0.9rem",
+                  transition: "all 0.2s ease",
+                  opacity: currentPage === 1 ? 0.4 : 1
+                }}
+              >
+                ‹
+              </button>
+              <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+                Page {currentPage} of {totalPages} ({sortedCompaniesList.length} total)
+              </span>
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                style={{
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-primary)",
+                  color: "var(--text-primary)",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "8px",
+                  cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+                  fontSize: "0.9rem",
+                  transition: "all 0.2s ease",
+                  opacity: currentPage === totalPages ? 0.4 : 1
+                }}
+              >
+                ›
+              </button>
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+                style={{
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-primary)",
+                  color: "var(--text-primary)",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "8px",
+                  cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+                  fontSize: "0.9rem",
+                  transition: "all 0.2s ease",
+                  opacity: currentPage === totalPages ? 0.4 : 1
+                }}
+              >
+                »»
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* Edit Company Modal */}

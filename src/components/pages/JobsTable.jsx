@@ -237,7 +237,7 @@ function JobsTable({
       <div className="action-bar">
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <h1 style={{ color: "var(--accent-primary)", fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: "1.75rem" }}>Applications</h1>
-          <span style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>
+          <span className="heading-count">
             {filteredJobs.length === jobs.length
               ? `${jobs.length} ${jobs.length === 1 ? 'application' : 'applications'}`
               : `${filteredJobs.length} of ${jobs.length}`

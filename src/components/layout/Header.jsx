@@ -26,7 +26,15 @@ function Header({ view, setView, onBackup, onImport, lastBackupTime, theme, setT
       <header className="header">
         <div className="header-content">
           <div className="logo">
-            <div className="theme-toggle">{theme === 'meow' ? '🐱' : theme === 'space' ? '🚀' : '🎯'}</div>
+            <button
+              type="button"
+              className="theme-toggle"
+              onClick={() => setView("dashboard")}
+              aria-label="Go to dashboard"
+              title="Go to dashboard"
+            >
+              {theme === 'meow' ? '🐱' : theme === 'space' ? '🚀' : '🎯'}
+            </button>
             <span>{theme === 'meow' ? 'Job Search Dashpurr 🐾' : theme === 'space' ? 'Job Search Launchpad' : 'Job Search Dashboard'}</span>
           </div>
           <div className="header-controls">
