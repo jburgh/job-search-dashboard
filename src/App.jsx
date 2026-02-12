@@ -386,6 +386,56 @@ function App() {
     setTimeout(() => container.remove(), 2600);
   };
 
+  const ensureCompanyFromJob = (job) => {
+    const companyName = typeof job?.company === 'string' ? job.company.trim() : '';
+    if (!companyName) return;
+
+    setCustomCompanies(prev => {
+      const updated = { ...prev };
+      let hasCompany = false;
+
+      for (const [category, companies] of Object.entries(updated)) {
+        if (!Array.isArray(companies)) continue;
+        const index = companies.findIndex(company => company.name === companyName);
+        if (index !== -1) {
+          hasCompany = true;
+          if (!companies[index].url && job.url) {
+            const nextCompanies = [...companies];
+            nextCompanies[index] = {
+              ...nextCompanies[index],
+              url: SecurityUtil.validateURL(job.url) || nextCompanies[index].url
+            };
+            updated[category] = nextCompanies;
+          }
+          break;
+        }
+      }
+
+      if (hasCompany) return updated;
+
+      try {
+        const validated = SecurityUtil.validateCompanyData({
+          name: companyName,
+          url: job.url || '',
+          category: 'None',
+          fitLevel: null
+        });
+        const category = validated.category || 'None';
+        const nextCompanies = Array.isArray(updated[category]) ? [...updated[category]] : [];
+        nextCompanies.push({
+          name: validated.name,
+          url: validated.url,
+          fitLevel: validated.fitLevel
+        });
+        updated[category] = nextCompanies;
+      } catch (error) {
+        console.warn('Unable to add company from job:', error);
+      }
+
+      return updated;
+    });
+  };
+
   // Job CRUD operations
   const addJob = (job) => {
     try {
@@ -393,6 +443,7 @@ function App() {
         ...job,
         id: Date.now()
       });
+      ensureCompanyFromJob(validatedJob);
       setJobs(prev => [...prev, validatedJob]);
       setShowModal(false);
       setEditingJob(null);

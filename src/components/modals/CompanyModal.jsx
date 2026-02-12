@@ -67,7 +67,7 @@ function CompanyModal({ onSave, onClose, existingCategories }) {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Category *</label>
+                <label>Category</label>
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value, newCategory: "" })}
