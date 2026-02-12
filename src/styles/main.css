@@ -764,6 +764,7 @@ body {
     font-weight: 600;
 }
 
+/* Hot - Highest priority (Tier 1) */
 .priority-tier1 {
     background: #fecaca;
     color: #991b1b;
@@ -774,53 +775,30 @@ body {
     color: #fca5a5;
 }
 
+/* Warm - Medium priority (Tier 2) */
 .priority-tier2 {
-    background: #fed7aa;
-    color: #9a3412;
-}
-
-[data-theme="dark"] .priority-tier2 {
-    background: #ea580c;
-    color: #fed7aa;
-}
-
-.priority-tier3 {
     background: #fef3c7;
     color: #78350f;
 }
 
-[data-theme="dark"] .priority-tier3 {
+[data-theme="dark"] .priority-tier2 {
     background: #854d0e;
     color: #fcd34d;
+}
+
+/* Cool - Lower priority (Tier 3) */
+.priority-tier3 {
+    background: #e0f2fe;
+    color: #075985;
+}
+
+[data-theme="dark"] .priority-tier3 {
+    background: #0c4a6e;
+    color: #7dd3fc;
 }
 
 .table tbody tr:last-child td {
     border-bottom: none;
-}
-
-[data-theme="dark"] .priority-tier1 {
-    background: #991b1b;
-    color: #fca5a5;
-}
-
-.priority-tier2 {
-    background: #fed7aa;
-    color: #9a3412;
-}
-
-[data-theme="dark"] .priority-tier2 {
-    background: #ea580c;
-    color: #fed7aa;
-}
-
-.priority-tier3 {
-    background: #fef3c7;
-    color: #78350f;
-}
-
-[data-theme="dark"] .priority-tier3 {
-    background: #854d0e;
-    color: #fcd34d;
 }
 
 .modal-overlay {

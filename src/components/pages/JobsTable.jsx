@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StatusBadge, PriorityBadge } from '../common';
 import { JOB_STATUSES } from '../../constants/jobStatuses';
 import { CLOSE_REASONS } from '../../constants/closeReasons';
-import { PRIORITIES } from '../../constants/priorities';
+import { PRIORITIES, getPriorityLabel, getPriorityTier } from '../../constants/priorities';
 import { PROGRESSIONS } from '../../constants/progressionStages';
 import { UIUtil } from '../../utils/ui';
 
 // Status and priority lists for filters
 const STATUSES = Object.values(JOB_STATUSES);
-const PRIORITY_LIST = Object.values(PRIORITIES);
+const PRIORITY_LIST = PRIORITIES; // Already contains display labels
 const OPEN_STATUSES = [JOB_STATUSES.APPLIED, JOB_STATUSES.IN_PROGRESS];
 const PROGRESSED_STAGES = PROGRESSIONS.filter(p => p !== 'Application');
 
@@ -115,9 +115,12 @@ function JobsTable({
       return false;
     }
 
-    // Priority multiselect filter
-    if (selectedPriorities.length > 0 && !selectedPriorities.includes(job.priority)) {
-      return false;
+    // Priority multiselect filter (convert labels to tiers for comparison)
+    if (selectedPriorities.length > 0) {
+      const selectedTiers = selectedPriorities.map(label => getPriorityTier(label));
+      if (!selectedTiers.includes(job.priority)) {
+        return false;
+      }
     }
 
     // Date range filter

@@ -1,4 +1,5 @@
 import React from 'react';
+import { getPriorityLabel } from '../../constants/priorities';
 
 /**
  * Priority badge component for displaying job priority tier
@@ -6,10 +7,19 @@ import React from 'react';
 function PriorityBadge({ priority }) {
   if (!priority) {
     console.warn("PriorityBadge received undefined priority");
-    return <span className="priority-badge priority-tier2">No priority</span>;
+    return <span className="priority-badge priority-tier2">Warm</span>;
   }
-  const className = `priority-badge priority-${priority.toLowerCase().replace(/\s+/g, "")}`;
-  return <span className={className}>{priority}</span>;
+  
+  // Get display label and map to CSS class
+  const displayLabel = getPriorityLabel(priority);
+  const tierMap = {
+    'Tier 1': 'tier1',
+    'Tier 2': 'tier2',
+    'Tier 3': 'tier3'
+  };
+  const cssClass = tierMap[priority] || 'tier2';
+  
+  return <span className={`priority-badge priority-${cssClass}`}>{displayLabel}</span>;
 }
 
 export default PriorityBadge;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { STATUSES } from '../../constants/jobStatuses';
 import { PROGRESSIONS } from '../../constants/progressionStages';
-import { PRIORITIES } from '../../constants/priorities';
+import { PRIORITIES, PRIORITY_TIERS, getPriorityLabel, getPriorityTier } from '../../constants/priorities';
 import { CLOSE_REASONS } from '../../constants/closeReasons';
 
 /**
@@ -171,8 +171,11 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
               )}
               <div className="form-group">
                 <label>Priority</label>
-                <select value={formData.priority} onChange={(e) => setFormData({ ...formData, priority: e.target.value })}>
-                  {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
+                <select 
+                  value={getPriorityLabel(formData.priority)} 
+                  onChange={(e) => setFormData({ ...formData, priority: getPriorityTier(e.target.value) })}
+                >
+                  {PRIORITIES.map(label => <option key={label} value={label}>{label}</option>)}
                 </select>
               </div>
             </div>
