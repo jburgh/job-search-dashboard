@@ -32,6 +32,7 @@ function Companies({
   const [editCompanyName, setEditCompanyName] = useState('');
   const [editCategory, setEditCategory] = useState('');
   const [editNewCategory, setEditNewCategory] = useState('');
+  const [editFitLevel, setEditFitLevel] = useState(null);
   const [showHidden, setShowHidden] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
@@ -64,12 +65,21 @@ function Companies({
   // Get all unique categories from companies object
   const allCategories = Object.keys(companies).sort();
 
-  // Get all companies from all categories
-  const allCompaniesList = Object.values(companies)
+  // Get all unique companies across categories
+  const allUniqueCompanies = Object.values(companies)
     .flat()
     .filter((company, index, self) =>
       index === self.findIndex(c => c.name === company.name)
-    )
+    );
+
+  // Count how many actual companies are hidden
+  const hiddenCount = allUniqueCompanies.filter(company => {
+    const companyName = company?.name ? company.name.trim().toLowerCase() : '';
+    return blockedNameSet.has(companyName);
+  }).length;
+
+  // Get all companies from all categories
+  const allCompaniesList = allUniqueCompanies
     .filter(company => {
       if (showHidden) return true;
       const companyName = company?.name ? company.name.trim().toLowerCase() : '';
@@ -190,7 +200,7 @@ function Companies({
 
   const handleBulkCategoryUpdate = () => {
     if (!bulkCategory && !bulkNewCategory) {
-      alert('Please select or enter a category');
+      alert('Select or enter a category to continue.');
       return;
     }
     const category = bulkCategory === '' ? bulkNewCategory : bulkCategory;
@@ -318,7 +328,7 @@ function Companies({
               onChange={(e) => setShowHidden(e.target.checked)}
               style={{ cursor: "pointer" }}
             />
-            Show hidden ({blockedCompanies.length})
+            Show hidden ({hiddenCount})
           </label>
           <button className="btn" onClick={onAddCompany}>Add company</button>
         </div>
@@ -717,7 +727,7 @@ function Companies({
               }}
             >
               <span>
-                {appliedFilter === 'all' ? 'Applied or not' : (appliedFilter === 'applied' ? 'Applied' : 'Not applied')}
+                {appliedFilter === 'all' ? 'All companies' : (appliedFilter === 'applied' ? 'Applied to' : 'Not applied to')}
               </span>
               <span style={{ fontSize: "0.7rem" }}>▼</span>
             </button>
@@ -734,8 +744,8 @@ function Companies({
                 zIndex: 1000,
                 minWidth: "160px"
               }}>
-                {['All companies', 'Applied', 'Not applied'].map(option => {
-                  const value = option === 'All companies' ? 'all' : (option === 'Applied' ? 'applied' : 'not-applied');
+                {['All companies', 'Applied to', 'Not applied to'].map(option => {
+                  const value = option === 'All companies' ? 'all' : (option === 'Applied to' ? 'applied' : 'not-applied');
                   return (
                     <label
                       key={option}
@@ -810,9 +820,19 @@ function Companies({
       {/* Companies Table */}
       {filteredCompaniesList.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">🔍</div>
-          <h3>No companies found</h3>
-          <p>Try adjusting your search</p>
+          {allCompaniesList.length === 0 ? (
+            <>
+              <div className="empty-state-icon">🏢</div>
+              <h3>No companies yet</h3>
+              <p>Add a company to start building your target list.</p>
+            </>
+          ) : (
+            <>
+              <div className="empty-state-icon">🔍</div>
+              <h3>No companies match your filters</h3>
+              <p>Try broadening your search or clearing some filters.</p>
+            </>
+          )}
         </div>
       ) : (
         <>
@@ -979,6 +999,7 @@ function Companies({
                           setEditCompanyName(company.name);
                           setEditCategory(companyCategory);
                           setEditNewCategory('');
+                          setEditFitLevel(company.fitLevel || null);
                         }}>
                           Edit
                         </button>
@@ -1003,6 +1024,8 @@ function Companies({
                 className="pagination-btn"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}
+                title="First page"
+                aria-label="First page"
                 style={{
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border-primary)",
@@ -1021,6 +1044,8 @@ function Companies({
                 className="pagination-btn"
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
+                title="Previous page"
+                aria-label="Previous page"
                 style={{
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border-primary)",
@@ -1042,6 +1067,8 @@ function Companies({
                 className="pagination-btn"
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
+                title="Next page"
+                aria-label="Next page"
                 style={{
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border-primary)",
@@ -1060,6 +1087,8 @@ function Companies({
                 className="pagination-btn"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}
+                title="Last page"
+                aria-label="Last page"
                 style={{
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border-primary)",
@@ -1085,6 +1114,7 @@ function Companies({
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Edit company</h2>
+              <button className="modal-close" onClick={() => setEditingCompany(null)}>×</button>
             </div>
             <div className="modal-body">
               <div className="form-group">
@@ -1097,28 +1127,47 @@ function Companies({
                 />
               </div>
               <div className="form-group">
-                <label>URL</label>
+                <label>Careers page URL</label>
                 <input
                   type="url"
                   value={editUrl}
                   onChange={(e) => setEditUrl(e.target.value)}
                   placeholder="https://company.com/careers"
                 />
+                <span className="form-hint">Save their jobs page for quick check-ins.</span>
               </div>
-              <div className="form-group">
-                <label>Category</label>
-                <select
-                  value={editCategory}
-                  onChange={(e) => {
-                    setEditCategory(e.target.value);
-                    setEditNewCategory("");
-                  }}
-                >
-                  {allCategories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                  <option value="">Create new category</option>
-                </select>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Category</label>
+                  <select
+                    value={editCategory}
+                    onChange={(e) => {
+                      setEditCategory(e.target.value);
+                      setEditNewCategory("");
+                    }}
+                  >
+                    <option value="None">None</option>
+                    <option value="">Create new category</option>
+                    <option disabled>──────────</option>
+                    {allCategories.filter(cat => cat !== "None").map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                  <span className="form-hint">Group similar companies to stay organized.</span>
+                </div>
+                <div className="form-group">
+                  <label>Fit level</label>
+                  <select
+                    value={getFitLevelLabel(editFitLevel)}
+                    onChange={(e) => setEditFitLevel(getFitLevelValue(e.target.value))}
+                  >
+                    <option value="—">—</option>
+                    <option value="Strong">Strong</option>
+                    <option value="Decent">Decent</option>
+                    <option value="Long shot">Long shot</option>
+                  </select>
+                  <span className="form-hint">Think location, comp, role availability, and hiring patterns.</span>
+                </div>
               </div>
               {editCategory === "" && (
                 <div className="form-group">
@@ -1129,6 +1178,7 @@ function Companies({
                     onChange={(e) => setEditNewCategory(e.target.value)}
                     placeholder="e.g., SaaS Platforms"
                   />
+                  <span className="form-hint">Pick a label that makes sense to you.</span>
                 </div>
               )}
             </div>
@@ -1140,11 +1190,12 @@ function Companies({
                 onUpdateCompany(editingCompany.name, {
                   name: editCompanyName,
                   url: editUrl,
-                  category: editCategory === "" ? editNewCategory : editCategory
+                  category: editCategory === "" ? editNewCategory : editCategory,
+                  fitLevel: editFitLevel
                 });
                 setEditingCompany(null);
               }}>
-                Save
+                Save changes
               </button>
             </div>
           </div>
@@ -1160,6 +1211,7 @@ function Companies({
               <button className="modal-close" onClick={() => setShowCategoryManager(false)}>×</button>
             </div>
             <div className="modal-body" style={{ maxHeight: "60vh", overflowY: "auto" }}>
+              <p className="form-hint" style={{ marginBottom: "1.25rem" }}>Categories help you sort your target companies into groups that you can filter.</p>
               {/* Add new category */}
               <div style={{ marginBottom: "2rem", padding: "1rem", background: "var(--bg-elevated)", borderRadius: "10px" }}>
                 <h3 style={{ marginBottom: "1rem", fontSize: "0.95rem", fontWeight: "600" }}>Add new category</h3>

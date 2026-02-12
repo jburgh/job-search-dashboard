@@ -38,7 +38,7 @@ function ImportModal({ onImport, onClose }) {
 
   const handleFile = (file) => {
     if (!file.name.endsWith('.json')) {
-      alert('Please select a JSON backup file');
+      alert('Select a JSON backup file to continue.');
       return;
     }
 
@@ -59,14 +59,10 @@ function ImportModal({ onImport, onClose }) {
           {}
         );
 
-        const categoryCount = Array.isArray(companyCollections)
-          ? new Set(
-              companyCollections
-                .filter(entry => entry && typeof entry === 'object')
-                .map(entry => (entry.category || 'None').trim() || 'None')
-            ).size
+        const companyCount = Array.isArray(companyCollections)
+          ? companyCollections.filter(entry => entry && typeof entry === 'object').length
           : (companyCollections && typeof companyCollections === 'object'
-              ? Object.keys(companyCollections).length
+              ? Object.values(companyCollections).reduce((sum, list) => sum + (Array.isArray(list) ? list.length : 0), 0)
               : 0);
 
         if (!data.jobs || !Array.isArray(data.jobs)) {
@@ -77,12 +73,13 @@ function ImportModal({ onImport, onClose }) {
         setFileContent(content);
         setPreview({
           jobCount: data.jobs.length,
-          categoryCount,
+          companyCount,
           exportDate: parsed.exportDate || data.exportDate ? new Date(parsed.exportDate || data.exportDate).toLocaleString() : 'Unknown',
           companies: data.jobs.map(j => j.company).filter((v, i, a) => a.indexOf(v) === i).slice(0, 10)
         });
       } catch (error) {
-        alert('Error reading file: ' + error.message);
+        console.error('Error reading file:', error);
+        alert('Couldn\'t read this file. Make sure it\'s a valid backup.');
       }
     };
     reader.readAsText(file);
@@ -146,7 +143,7 @@ function ImportModal({ onImport, onClose }) {
                   </div>
                   <div>
                     <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Companies to import</div>
-                    <div style={{ color: 'var(--text-primary)', fontSize: '1.5rem', fontWeight: 'bold' }}>{preview.categoryCount}</div>
+                    <div style={{ color: 'var(--text-primary)', fontSize: '1.5rem', fontWeight: 'bold' }}>{preview.companyCount}</div>
                   </div>
                 </div>
                 <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>

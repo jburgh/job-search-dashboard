@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { JOB_STATUSES } from '../../constants/jobStatuses';
 import { STATUSES } from '../../constants/jobStatuses';
 import { analytics } from '../../utils/analytics';
 import {
@@ -10,8 +9,6 @@ import {
 } from '../charts';
 import StatusBadge from '../common/StatusBadge';
 import KeyMetricsGrid from './KeyMetricsGrid';
-import InsightsPanel from './InsightsPanel';
-import { generateInsights } from './generateInsights';
 
 /**
  * Main Analytics Dashboard Component
@@ -77,13 +74,11 @@ const AnalyticsDashboard = ({ jobs }) => {
   }, [jobs, timeRange, dateRange]);
 
   // Calculate metrics using filtered jobs
-  const { overview, timeData, companyData, insights } = useMemo(() => {
+  const { overview, timeData } = useMemo(() => {
     const overview = analytics.getJobSearchOverview(filteredJobs);
     const timeData = analytics.getTimeBasedAnalytics(filteredJobs);
-    const companyData = analytics.getCompanyPriorityAnalytics(filteredJobs);
-    const insights = generateInsights(overview, timeData, companyData);
 
-    return { overview, timeData, companyData, insights };
+    return { overview, timeData };
   }, [filteredJobs]);
 
   // Calculate constant metrics from unfiltered jobs (for pipeline, this week, this month)
@@ -165,6 +160,20 @@ const AnalyticsDashboard = ({ jobs }) => {
     </button>
   );
 
+  if (jobs.length === 0) {
+    return (
+      <div className="analytics-dashboard">
+        <div className="empty-state" style={{ padding: '6rem 2rem' }}>
+          <div className="empty-state-icon">📊</div>
+          <h3>Your dashboard is waiting for data</h3>
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '400px', margin: '0.5rem auto 0' }}>
+            Add your first application to start seeing stats and charts here.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="analytics-dashboard">
       {/* Dashboard Time Range Filter */}
@@ -200,7 +209,7 @@ const AnalyticsDashboard = ({ jobs }) => {
       <div className="charts-section">
         {/* Large charts - full width */}
         <div className="chart-large">
-          <ChartCard title="Applications & response activity">
+          <ChartCard title="Applications & responses over time">
             {combinedChartData.length === 0 ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                 No data available for this time range
@@ -222,13 +231,13 @@ const AnalyticsDashboard = ({ jobs }) => {
         {/* Medium Charts - Side by Side */}
         <div className="chart-row">
           <div className="chart-medium">
-            <ChartCard title="Active pipeline status">
+            <ChartCard title="Where things stand now">
               <FunnelChartComponent data={pipelineChartData} />
             </ChartCard>
           </div>
 
           <div className="chart-medium">
-            <ChartCard title="Closure reasons">
+            <ChartCard title="Why applications closed">
               <PieChartComponent data={closureChartData} />
             </ChartCard>
           </div>
@@ -237,7 +246,7 @@ const AnalyticsDashboard = ({ jobs }) => {
         {/* Responses and Statuses Side by Side */}
         <div className="chart-row">
           <div className="chart-medium">
-            <ChartCard title="Callbacks by progression">
+            <ChartCard title="How far callbacks got">
               <PieChartComponent data={progressionChartData} />
             </ChartCard>
           </div>
@@ -282,8 +291,6 @@ const AnalyticsDashboard = ({ jobs }) => {
         </div>
       </div>
 
-      {/* Insights */}
-      <InsightsPanel insights={insights} />
     </div>
   );
 };

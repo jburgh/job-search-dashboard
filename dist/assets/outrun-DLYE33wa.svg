@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f9c80e"/>
+      <stop offset="30%" stop-color="#ff6c11"/>
+      <stop offset="60%" stop-color="#ff3864"/>
+      <stop offset="100%" stop-color="#f6019d"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="8%" r="35%">
+      <stop offset="0%" stop-color="#ff3864" stop-opacity="0.2"/>
+      <stop offset="60%" stop-color="#f6019d" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#0d0221" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowLeft" cx="0%" cy="50%" r="30%">
+      <stop offset="0%" stop-color="#f6019d" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0d0221" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowRight" cx="100%" cy="50%" r="30%">
+      <stop offset="0%" stop-color="#2de2e6" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0d0221" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Base -->
+  <rect width="1920" height="1080" fill="#0d0221"/>
+
+  <!-- Ambient glows on edges -->
+  <rect width="1920" height="1080" fill="url(#sunGlow)"/>
+  <rect width="1920" height="1080" fill="url(#glowLeft)"/>
+  <rect width="1920" height="1080" fill="url(#glowRight)"/>
+
+  <!-- ============ TOP: Sunset behind header ============ -->
+  <circle cx="960" cy="-20" r="120" fill="url(#sunGrad)" opacity="0.25"/>
+  <!-- Scanlines on sun -->
+  <g opacity="0.12">
+    <rect x="840" y="-80" width="240" height="4" fill="#0d0221"/>
+    <rect x="840" y="-68" width="240" height="5" fill="#0d0221"/>
+    <rect x="840" y="-54" width="240" height="6" fill="#0d0221"/>
+    <rect x="840" y="-38" width="240" height="8" fill="#0d0221"/>
+    <rect x="840" y="-18" width="240" height="10" fill="#0d0221"/>
+    <rect x="840" y="4" width="240" height="12" fill="#0d0221"/>
+  </g>
+
+  <!-- ============ LEFT SIDE: Palm tree + decorations ============ -->
+
+  <!-- Large palm tree - far left -->
+  <g>
+    <!-- Trunk -->
+    <path d="M120,1080 Q105,800 90,580 Q95,565 105,580 Q115,800 130,1080" fill="#2e1848" stroke="#f6019d" stroke-width="1" opacity="0.7"/>
+    <!-- Fronds with neon edge glow -->
+    <path d="M96,580 Q20,530 -40,560 Q30,515 96,555" fill="#2e1848" stroke="#f6019d" stroke-width="0.8" opacity="0.7"/>
+    <path d="M96,575 Q-10,490 -60,470 Q10,475 96,545" fill="#2e1848" stroke="#f6019d" stroke-width="0.8" opacity="0.7"/>
+    <path d="M96,570 Q30,460 20,400 Q50,450 98,535" fill="#2e1848" stroke="#f6019d" stroke-width="0.8" opacity="0.7"/>
+    <path d="M100,570 Q130,450 190,400 Q155,460 102,535" fill="#2e1848" stroke="#f6019d" stroke-width="0.8" opacity="0.7"/>
+    <path d="M100,575 Q170,500 230,490 Q160,515 100,548" fill="#2e1848" stroke="#f6019d" stroke-width="0.8" opacity="0.7"/>
+    <path d="M100,580 Q180,545 240,560 Q170,545 100,560" fill="#2e1848" stroke="#f6019d" stroke-width="0.8" opacity="0.7"/>
+  </g>
+
+  <!-- Second smaller palm - left -->
+  <g>
+    <path d="M220,1080 Q215,880 205,720 Q209,710 215,720 Q222,880 230,1080" fill="#2e1848" stroke="#d40078" stroke-width="0.8" opacity="0.5"/>
+    <path d="M209,720 Q160,690 120,710 Q165,680 209,705" fill="#2e1848" stroke="#d40078" stroke-width="0.6" opacity="0.5"/>
+    <path d="M209,716 Q135,660 105,645 Q145,648 209,695" fill="#2e1848" stroke="#d40078" stroke-width="0.6" opacity="0.5"/>
+    <path d="M209,714 Q170,640 165,600 Q180,635 211,690" fill="#2e1848" stroke="#d40078" stroke-width="0.6" opacity="0.5"/>
+    <path d="M213,714 Q235,640 270,600 Q252,640 214,690" fill="#2e1848" stroke="#d40078" stroke-width="0.6" opacity="0.5"/>
+    <path d="M213,718 Q265,680 300,685 Q258,682 213,702" fill="#2e1848" stroke="#d40078" stroke-width="0.6" opacity="0.5"/>
+  </g>
+
+  <!-- ============ RIGHT SIDE: Palm tree + decorations ============ -->
+
+  <!-- Large palm tree - far right -->
+  <g>
+    <path d="M1810,1080 Q1820,820 1830,600 Q1835,588 1840,600 Q1835,820 1825,1080" fill="#2e1848" stroke="#2de2e6" stroke-width="1" opacity="0.7"/>
+    <path d="M1834,600 Q1900,555 1960,580 Q1895,540 1834,575" fill="#2e1848" stroke="#2de2e6" stroke-width="0.8" opacity="0.7"/>
+    <path d="M1834,595 Q1930,510 1975,490 Q1920,495 1834,565" fill="#2e1848" stroke="#2de2e6" stroke-width="0.8" opacity="0.7"/>
+    <path d="M1834,590 Q1890,475 1900,420 Q1875,470 1832,555" fill="#2e1848" stroke="#2de2e6" stroke-width="0.8" opacity="0.7"/>
+    <path d="M1830,590 Q1790,470 1730,420 Q1770,470 1828,555" fill="#2e1848" stroke="#2de2e6" stroke-width="0.8" opacity="0.7"/>
+    <path d="M1830,595 Q1750,520 1690,510 Q1760,530 1830,565" fill="#2e1848" stroke="#2de2e6" stroke-width="0.8" opacity="0.7"/>
+    <path d="M1830,600 Q1740,560 1680,575 Q1750,565 1830,580" fill="#2e1848" stroke="#2de2e6" stroke-width="0.8" opacity="0.7"/>
+  </g>
+
+  <!-- Second smaller palm - right -->
+  <g>
+    <path d="M1700,1080 Q1705,890 1715,740 Q1719,730 1724,740 Q1718,890 1715,1080" fill="#2e1848" stroke="#2de2e6" stroke-width="0.8" opacity="0.5"/>
+    <path d="M1719,740 Q1770,710 1810,730 Q1765,700 1719,726" fill="#2e1848" stroke="#2de2e6" stroke-width="0.6" opacity="0.5"/>
+    <path d="M1719,736 Q1790,680 1820,665 Q1780,670 1719,715" fill="#2e1848" stroke="#2de2e6" stroke-width="0.6" opacity="0.5"/>
+    <path d="M1719,734 Q1755,660 1760,620 Q1745,655 1717,710" fill="#2e1848" stroke="#2de2e6" stroke-width="0.6" opacity="0.5"/>
+    <path d="M1715,734 Q1690,660 1655,620 Q1672,660 1714,710" fill="#2e1848" stroke="#2de2e6" stroke-width="0.6" opacity="0.5"/>
+    <path d="M1715,738 Q1660,700 1625,705 Q1668,700 1715,722" fill="#2e1848" stroke="#2de2e6" stroke-width="0.6" opacity="0.5"/>
+  </g>
+
+  <!-- ============ BOTTOM: Perspective grid ============ -->
+
+  <!-- Horizon line -->
+  <line x1="0" y1="920" x2="1920" y2="920" stroke="#2de2e6" stroke-width="2" opacity="0.4"/>
+
+  <g opacity="0.3">
+    <!-- Horizontal grid lines -->
+    <line x1="0" y1="940" x2="1920" y2="940" stroke="#2de2e6" stroke-width="0.8"/>
+    <line x1="0" y1="960" x2="1920" y2="960" stroke="#2de2e6" stroke-width="0.9"/>
+    <line x1="0" y1="985" x2="1920" y2="985" stroke="#2de2e6" stroke-width="1"/>
+    <line x1="0" y1="1015" x2="1920" y2="1015" stroke="#2de2e6" stroke-width="1.2"/>
+    <line x1="0" y1="1050" x2="1920" y2="1050" stroke="#2de2e6" stroke-width="1.4"/>
+
+    <!-- Vertical grid lines converging to vanishing point -->
+    <line x1="960" y1="920" x2="0" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="160" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="320" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="480" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="640" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="800" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="960" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="1120" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="1280" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="1440" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="1600" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="1760" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+    <line x1="960" y1="920" x2="1920" y2="1080" stroke="#2de2e6" stroke-width="0.5"/>
+  </g>
+
+  <!-- ============ CORNER DECORATIONS ============ -->
+
+  <!-- Top-left: neon triangle + squiggles -->
+  <polygon points="40,60 130,200 -50,200" fill="none" stroke="#f6019d" stroke-width="2.5" opacity="0.45"/>
+  <polygon points="40,80 115,190 -35,190" fill="none" stroke="#2de2e6" stroke-width="2" opacity="0.3"/>
+  <path d="M30,260 Q55,240 50,270 Q45,300 70,285 Q95,270 85,300" fill="none" stroke="#f6019d" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  <circle cx="45" cy="310" r="5" fill="#f6019d" opacity="0.35"/>
+  <circle cx="75" cy="325" r="4" fill="#f6019d" opacity="0.3"/>
+  <circle cx="30" cy="335" r="3" fill="#f6019d" opacity="0.25"/>
+
+  <!-- Top-right: squiggles + dots -->
+  <path d="M1870,120 Q1845,100 1850,135 Q1855,170 1830,155 Q1805,140 1815,175" fill="none" stroke="#2de2e6" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  <circle cx="1880" cy="180" r="5" fill="#2de2e6" opacity="0.35"/>
+  <circle cx="1855" cy="200" r="4" fill="#2de2e6" opacity="0.3"/>
+  <circle cx="1895" cy="210" r="3" fill="#2de2e6" opacity="0.25"/>
+  <path d="M1860,260 Q1885,245 1880,275 Q1875,305 1900,290" fill="none" stroke="#ff6c11" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Bottom-left: orange squiggles -->
+  <path d="M50,820 Q80,800 75,835 Q70,870 100,850 Q130,830 120,865" fill="none" stroke="#ff6c11" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  <circle cx="60" cy="880" r="5" fill="#ff6c11" opacity="0.35"/>
+  <circle cx="95" cy="895" r="4" fill="#ff6c11" opacity="0.3"/>
+
+  <!-- Bottom-right: pink squiggles -->
+  <path d="M1870,800 Q1845,785 1850,815 Q1855,845 1830,830 Q1805,815 1815,850" fill="none" stroke="#f6019d" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+  <circle cx="1880" cy="860" r="5" fill="#f6019d" opacity="0.35"/>
+  <circle cx="1850" cy="878" r="4" fill="#f6019d" opacity="0.3"/>
+
+  <!-- ============ EDGE NEON LINES ============ -->
+
+  <!-- Thin neon border lines along far edges -->
+  <line x1="0" y1="0" x2="0" y2="1080" stroke="#f6019d" stroke-width="4" opacity="0.4"/>
+  <line x1="1920" y1="0" x2="1920" y2="1080" stroke="#2de2e6" stroke-width="4" opacity="0.4"/>
+  <line x1="0" y1="0" x2="1920" y2="0" stroke="#f6019d" stroke-width="3" opacity="0.3"/>
+  <line x1="0" y1="1080" x2="1920" y2="1080" stroke="#2de2e6" stroke-width="3" opacity="0.3"/>
+
+  <!-- ============ SCATTERED STARS ============ -->
+  <g opacity="0.5">
+    <circle cx="30" cy="30" r="1.5" fill="#ffffff"/>
+    <circle cx="80" cy="80" r="0.8" fill="#ffffff"/>
+    <circle cx="160" cy="40" r="1" fill="#ffffff"/>
+    <circle cx="50" cy="400" r="1" fill="#ffffff"/>
+    <circle cx="30" cy="550" r="0.8" fill="#ffffff"/>
+    <circle cx="70" cy="700" r="1.2" fill="#ffffff"/>
+
+    <circle cx="1850" cy="50" r="1" fill="#ffffff"/>
+    <circle cx="1900" cy="120" r="0.8" fill="#ffffff"/>
+    <circle cx="1870" cy="300" r="1.2" fill="#ffffff"/>
+    <circle cx="1895" cy="500" r="1" fill="#ffffff"/>
+    <circle cx="1860" cy="650" r="0.8" fill="#ffffff"/>
+    <circle cx="1890" cy="780" r="1.2" fill="#ffffff"/>
+  </g>
+
+  <!-- Colored accent stars on edges -->
+  <circle cx="60" cy="150" r="2" fill="#2de2e6" opacity="0.5"/>
+  <circle cx="1880" cy="400" r="2" fill="#f6019d" opacity="0.5"/>
+  <circle cx="40" cy="650" r="1.8" fill="#ff6c11" opacity="0.4"/>
+  <circle cx="1900" cy="700" r="1.8" fill="#2de2e6" opacity="0.4"/>
+
+  <!-- Edge sparkles (4-point) -->
+  <g fill="#ffffff" opacity="0.4">
+    <polygon points="60,450 62,456 68,458 62,460 60,466 58,460 52,458 58,456"/>
+    <polygon points="1870,250 1872,256 1878,258 1872,260 1870,266 1868,260 1862,258 1868,256"/>
+  </g>
+
+  <!-- Flying birds near left palm -->
+  <g opacity="0.2" fill="none" stroke="#1a0a2e" stroke-width="1.5">
+    <path d="M140,500 Q148,492 156,500 Q164,492 172,500"/>
+    <path d="M170,520 Q176,514 182,520 Q188,514 194,520"/>
+    <path d="M115,530 Q121,524 127,530 Q133,524 139,530"/>
+  </g>
+
+</svg>

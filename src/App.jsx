@@ -233,8 +233,6 @@ function App() {
   const [lastBackupTime, setLastBackupTime] = useState(null);
   const [prefillCompany, setPrefillCompany] = useState(null);
   const hasLoadedRef = useRef(false);
-  const skipCompaniesSaveRef = useRef(true);
-  const skipBlockedSaveRef = useRef(true);
 
   const normalizeBlockedCompanies = (value) => {
     if (!value) return [];
@@ -304,6 +302,20 @@ function App() {
     }, 1000)
   ).current;
 
+  // Debounced save for companies
+  const debouncedSaveCompanies = useRef(
+    PerformanceUtil.debounce((companiesData) => {
+      StorageUtil.set(APP_CONFIG.STORAGE_KEYS.CUSTOM_COMPANIES, companiesData);
+    }, 500)
+  ).current;
+
+  // Debounced save for blocked companies
+  const debouncedSaveBlocked = useRef(
+    PerformanceUtil.debounce((blockedData) => {
+      StorageUtil.set(APP_CONFIG.STORAGE_KEYS.BLOCKED_COMPANIES, blockedData);
+    }, 500)
+  ).current;
+
   // Save jobs when changed
   useEffect(() => {
     if (jobs.length > 0) {
@@ -313,23 +325,17 @@ function App() {
 
   // Save companies when changed
   useEffect(() => {
-    if (!hasLoadedRef.current) return;
-    if (skipCompaniesSaveRef.current) {
-      skipCompaniesSaveRef.current = false;
-      return;
+    if (Object.keys(customCompanies).length > 0) {
+      debouncedSaveCompanies(customCompanies);
     }
-    StorageUtil.set(APP_CONFIG.STORAGE_KEYS.CUSTOM_COMPANIES, customCompanies);
-  }, [customCompanies]);
+  }, [customCompanies, debouncedSaveCompanies]);
 
   // Save blocked companies when changed
   useEffect(() => {
-    if (!hasLoadedRef.current) return;
-    if (skipBlockedSaveRef.current) {
-      skipBlockedSaveRef.current = false;
-      return;
+    if (hasLoadedRef.current) {
+      debouncedSaveBlocked(blockedCompanies);
     }
-    StorageUtil.set(APP_CONFIG.STORAGE_KEYS.BLOCKED_COMPANIES, blockedCompanies);
-  }, [blockedCompanies]);
+  }, [blockedCompanies, debouncedSaveBlocked]);
 
   // Save deleted categories when changed
   useEffect(() => {
@@ -392,7 +398,8 @@ function App() {
       setEditingJob(null);
       setPrefillCompany(null);
     } catch (error) {
-      alert('Error saving job: ' + error.message);
+      console.error('Error saving job:', error);
+      alert('Something went wrong while saving. Try again.');
     }
   };
 
@@ -415,12 +422,15 @@ function App() {
       setShowModal(false);
       setEditingJob(null);
     } catch (error) {
-      alert('Error updating job: ' + error.message);
+      console.error('Error updating job:', error);
+      alert('Something went wrong while updating. Try again.');
     }
   };
 
   const deleteJob = (id) => {
-    if (confirm("Are you sure you want to delete this job?")) {
+    const job = jobs.find(j => j.id === id);
+    const label = job ? `Delete "${job.role}" at ${job.company}?` : 'Delete this application?';
+    if (confirm(`${label} This can't be undone.`)) {
       setJobs(jobs.filter(j => j.id !== id));
     }
   };
@@ -454,7 +464,8 @@ function App() {
       StorageUtil.set(APP_CONFIG.STORAGE_KEYS.LAST_BACKUP, now.toISOString());
       alert("Backup downloaded successfully!");
     } catch (error) {
-      alert('Error exporting backup: ' + error.message);
+      console.error('Error exporting backup:', error);
+      alert('Something went wrong while creating your backup. Try again.');
     }
   };
 
@@ -486,7 +497,8 @@ function App() {
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      alert('Error exporting CSV: ' + error.message);
+      console.error('Error exporting CSV:', error);
+      alert('Something went wrong while exporting. Try again.');
     }
   };
 
@@ -690,7 +702,8 @@ function App() {
       setShowImportModal(false);
       alert(`Import complete! ${mode === 'replace' ? 'Data replaced.' : 'Data merged.'}`);
     } catch (error) {
-      alert('Error importing: ' + error.message);
+      console.error('Error importing:', error);
+      alert('Something went wrong during import. Check your file and try again.');
     }
   };
 
@@ -820,7 +833,8 @@ function App() {
       });
       setShowCompanyModal(false);
     } catch (error) {
-      alert('Error adding company: ' + error.message);
+      console.error('Error adding company:', error);
+      alert('Something went wrong while adding the company. Try again.');
     }
   };
 

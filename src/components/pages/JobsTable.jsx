@@ -227,8 +227,8 @@ function JobsTable({
     { key: 'priority', label: 'Priority' },
     { key: 'dateApplied', label: 'Date applied' },
     { key: 'salary', label: 'Salary' },
-    { key: 'closeReason', label: 'Reason' },
-    { key: 'progression', label: 'Progress' },
+    { key: 'closeReason', label: 'Close reason' },
+    { key: 'progression', label: 'Progression' },
     { key: 'followUp', label: 'Close date' },
     { key: 'notes', label: 'Notes' },
     { key: 'resumeUrl', label: 'Resume' },
@@ -419,8 +419,8 @@ function JobsTable({
               >
                 <span>
                   {selectedProgressionStages.length === 0
-                    ? 'All stages'
-                    : `Stage (${selectedProgressionStages.length})`}
+                    ? 'All progressions'
+                    : `Progression (${selectedProgressionStages.length})`}
                 </span>
                 <span style={{ fontSize: "0.7rem" }}>▼</span>
               </button>
@@ -763,9 +763,19 @@ function JobsTable({
 
       {filteredJobs.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-state-icon">🔍</div>
-          <h3>No applications. Let's change that!</h3>
-          <p>Add an application or adjust your filters</p>
+          {jobs.length === 0 ? (
+            <>
+              <div className="empty-state-icon">📝</div>
+              <h3>No applications yet</h3>
+              <p>Add your first one to start tracking your job search.</p>
+            </>
+          ) : (
+            <>
+              <div className="empty-state-icon">🔍</div>
+              <h3>No applications match your filters</h3>
+              <p>Try broadening your search or clearing some filters.</p>
+            </>
+          )}
         </div>
       ) : (
         <>
@@ -805,12 +815,12 @@ function JobsTable({
                   )}
                   {visibleColumns.closeReason && (
                     <th onClick={() => requestSort('closeReason')} style={{ cursor: 'pointer' }}>
-                      Reason{getSortIcon('closeReason')}
+                      Close reason{getSortIcon('closeReason')}
                     </th>
                   )}
                   {visibleColumns.progression && (
                     <th onClick={() => requestSort('progression')} style={{ cursor: 'pointer' }}>
-                      Progress{getSortIcon('progression')}
+                      Progression{getSortIcon('progression')}
                     </th>
                   )}
                   {visibleColumns.followUp && (
@@ -981,6 +991,8 @@ function JobsTable({
                 className="pagination-btn"
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}
+                title="First page"
+                aria-label="First page"
                 style={{
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border-primary)",
@@ -999,6 +1011,8 @@ function JobsTable({
                 className="pagination-btn"
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
+                title="Previous page"
+                aria-label="Previous page"
                 style={{
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border-primary)",
@@ -1020,6 +1034,8 @@ function JobsTable({
                 className="pagination-btn"
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
+                title="Next page"
+                aria-label="Next page"
                 style={{
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border-primary)",
@@ -1038,6 +1054,8 @@ function JobsTable({
                 className="pagination-btn"
                 onClick={() => setCurrentPage(totalPages)}
                 disabled={currentPage === totalPages}
+                title="Last page"
+                aria-label="Last page"
                 style={{
                   background: "var(--bg-secondary)",
                   border: "1px solid var(--border-primary)",

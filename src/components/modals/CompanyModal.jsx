@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getFitLevelLabel, getFitLevelValue } from '../../utils/fitLevel';
 
 /**
  * Modal for adding new companies
@@ -7,8 +8,9 @@ function CompanyModal({ onSave, onClose, existingCategories }) {
   const [formData, setFormData] = useState({
     name: "",
     url: "",
-    category: existingCategories[0] || "",
-    newCategory: ""
+    category: "None",
+    newCategory: "",
+    fitLevel: null
   });
 
   const handleSubmit = (e) => {
@@ -16,17 +18,18 @@ function CompanyModal({ onSave, onClose, existingCategories }) {
     try {
       const category = formData.newCategory.trim() || formData.category;
       if (!category || !formData.name.trim() || !formData.url.trim()) {
-        alert("Please fill in all required fields");
+        alert("Fill in all required fields to continue.");
         return;
       }
       onSave({
         name: formData.name.trim(),
         url: formData.url.trim(),
-        category: category.trim()
+        category: category.trim(),
+        fitLevel: formData.fitLevel
       });
     } catch (error) {
       console.error("Error submitting company:", error);
-      alert("Error saving company. Please try again.");
+      alert("Something went wrong while saving. Try again.");
     }
   };
 
@@ -59,20 +62,39 @@ function CompanyModal({ onSave, onClose, existingCategories }) {
                 onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                 placeholder="https://company.com/careers/jobs"
               />
+              <span className="form-hint">Save their jobs page for quick check-ins.</span>
             </div>
 
-            <div className="form-group">
-              <label>Category *</label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value, newCategory: "" })}
-                required={!formData.newCategory}
-              >
-                {existingCategories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-                <option value="">Create new category</option>
-              </select>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Category *</label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value, newCategory: "" })}
+                  required={!formData.newCategory}
+                >
+                  <option value="None">None</option>
+                  <option value="">Create new category</option>
+                  <option disabled>──────────</option>
+                  {existingCategories.filter(cat => cat !== "None").map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                <span className="form-hint">Group similar companies to stay organized.</span>
+              </div>
+              <div className="form-group">
+                <label>Fit level</label>
+                <select
+                  value={getFitLevelLabel(formData.fitLevel)}
+                  onChange={(e) => setFormData({ ...formData, fitLevel: getFitLevelValue(e.target.value) })}
+                >
+                  <option value="—">—</option>
+                  <option value="Strong">Strong</option>
+                  <option value="Decent">Decent</option>
+                  <option value="Long shot">Long shot</option>
+                </select>
+                <span className="form-hint">Think location, comp, role availability, and hiring patterns.</span>
+              </div>
             </div>
 
             {formData.category === "" && (
@@ -85,6 +107,7 @@ function CompanyModal({ onSave, onClose, existingCategories }) {
                   onChange={(e) => setFormData({ ...formData, newCategory: e.target.value })}
                   placeholder="e.g., SaaS Platforms"
                 />
+                <span className="form-hint">Pick a label that makes sense to you.</span>
               </div>
             )}
           </div>

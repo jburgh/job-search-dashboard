@@ -65,7 +65,8 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
       onSave(jobToSave);
     } catch (error) {
       console.error("Error submitting job:", error);
-      alert("Error saving job: " + error.message);
+      console.error('Error saving job:', error);
+      alert('Something went wrong while saving. Try again.');
     }
   };
 
@@ -92,6 +93,7 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                 <input
                   type="text"
                   required
+                  placeholder="Where are you applying?"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                 />
@@ -101,6 +103,7 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                 <input
                   type="text"
                   required
+                  placeholder="What's the role called?"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 />
@@ -111,9 +114,11 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
               <label>Job URL</label>
               <input
                 type="url"
+                placeholder="https://..."
                 value={formData.url}
                 onChange={(e) => setFormData({ ...formData, url: e.target.value })}
               />
+              <span className="form-hint">Paste the listing link so you can find it later.</span>
             </div>
 
             <div className="form-row">
@@ -121,19 +126,21 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                 <label>Resume URL</label>
                 <input
                   type="url"
-                  placeholder="Link to resume used for this application"
+                  placeholder="Link to the resume you sent"
                   value={formData.resumeUrl}
                   onChange={(e) => setFormData({ ...formData, resumeUrl: e.target.value })}
                 />
+                <span className="form-hint">Track which version you used.</span>
               </div>
               <div className="form-group">
                 <label>Cover letter URL</label>
                 <input
                   type="url"
-                  placeholder="Link to cover letter used for this application"
+                  placeholder="Link to the cover letter you sent"
                   value={formData.coverLetterUrl}
                   onChange={(e) => setFormData({ ...formData, coverLetterUrl: e.target.value })}
                 />
+                <span className="form-hint">Track which version you used.</span>
               </div>
             </div>
 
@@ -143,6 +150,7 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                 <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })}>
                   {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
+                <span className="form-hint">Switch to "In progress" once you hear back.</span>
               </div>
               <div className="form-group">
                 <label>Date applied</label>
@@ -151,6 +159,7 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                   value={formData.dateApplied}
                   onChange={(e) => setFormData({ ...formData, dateApplied: e.target.value })}
                 />
+                <span className="form-hint">Defaults to today. Backdate if needed.</span>
               </div>
             </div>
 
@@ -167,16 +176,22 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                     <option value="">Select progression...</option>
                     {PROGRESSIONS.map(p => <option key={p} value={p}>{p}</option>)}
                   </select>
+                  <span className="form-hint">
+                    {formData.status === "Closed"
+                      ? "Locked to where things ended."
+                      : "Update this as you move through rounds."}
+                  </span>
                 </div>
               )}
               <div className="form-group">
                 <label>Priority</label>
-                <select 
-                  value={getPriorityLabel(formData.priority)} 
+                <select
+                  value={getPriorityLabel(formData.priority)}
                   onChange={(e) => setFormData({ ...formData, priority: getPriorityTier(e.target.value) })}
                 >
                   {PRIORITIES.map(label => <option key={label} value={label}>{label}</option>)}
                 </select>
+                <span className="form-hint">Hot = dream job. Cool = worth a shot.</span>
               </div>
             </div>
 
@@ -192,6 +207,7 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                     <option value="">Select a reason...</option>
                     {Object.values(CLOSE_REASONS).map(r => <option key={r} value={r}>{r}</option>)}
                   </select>
+                  <span className="form-hint">What happened? Pick the closest match.</span>
                 </div>
                 <div className="form-group">
                   <label>Close date</label>
@@ -233,6 +249,7 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                 value={formData.contact}
                 onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
               />
+              <span className="form-hint">Your go-to person for follow-ups.</span>
             </div>
 
             <div className="form-group">
@@ -240,8 +257,9 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
               <textarea
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="Interview notes, referral info, etc."
+                placeholder="Interview prep, referral details, vibes..."
               />
+              <span className="form-hint">Jot down anything you want to remember.</span>
             </div>
           </div>
           <div className="modal-footer">

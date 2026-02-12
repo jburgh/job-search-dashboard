@@ -9,6 +9,7 @@ function Footer() {
       <div className="footer-content">
         <div className="footer-text">
           Built by a job seeker, for job seekers, shared freely.
+          <span className="footer-privacy">Your data stays in your browser and is never sent to a server.</span>
         </div>
         <div className="footer-links">
           <a
