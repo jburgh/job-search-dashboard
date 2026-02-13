@@ -4,10 +4,10 @@ import { APP_CONFIG } from '../../constants/appConfig';
 import { analytics } from '../../utils/analytics';
 import {
   ChartCard,
-  BarChartComponent,
   TripleLineChartComponent,
   FunnelChartComponent,
-  PieChartComponent
+  PieChartComponent,
+  StackedBarChartComponent
 } from '../charts';
 import StatusBadge from '../common/StatusBadge';
 import KeyMetricsGrid from './KeyMetricsGrid';
@@ -115,15 +115,15 @@ const AnalyticsDashboard = ({ jobs, companies }) => {
     );
   }, [filteredJobs, companies]);
 
-  const callbackRateByCategory = [...categoryTrends]
-    .filter(entry => entry.responded > 0)
-    .sort((a, b) => b.responded - a.responded)
-    .map(entry => ({ label: entry.category, value: entry.responded }));
-
-  const interviewRateByCategory = [...categoryTrends]
-    .filter(entry => entry.interviewed > 0)
-    .sort((a, b) => b.interviewed - a.interviewed)
-    .map(entry => ({ label: entry.category, value: entry.interviewed }));
+  const categoryBreakdownData = [...categoryTrends]
+    .filter(entry => entry.total > 0)
+    .sort((a, b) => b.total - a.total)
+    .map(entry => ({
+      label: entry.category,
+      applications: entry.total,
+      callbacks: entry.responded,
+      interviews: entry.interviewed
+    }));
 
   // Combine monthly applications and response activity into a single dataset
   const appsByMonth = {};
@@ -310,30 +310,16 @@ const AnalyticsDashboard = ({ jobs, companies }) => {
           </div>
         </div>
 
-        <div className="chart-row">
-          <div className="chart-medium">
-            <ChartCard title="Callbacks by category (beyond Application stage)">
-              {callbackRateByCategory.length === 0 ? (
-                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                  Not enough category data yet
-                </div>
-              ) : (
-                <BarChartComponent data={callbackRateByCategory} color="#10b981" />
-              )}
-            </ChartCard>
-          </div>
-
-          <div className="chart-medium">
-            <ChartCard title="Interviews by category (beyond Recruiter Screen)">
-              {interviewRateByCategory.length === 0 ? (
-                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                  Not enough category data yet
-                </div>
-              ) : (
-                <BarChartComponent data={interviewRateByCategory} color="#6b8aff" />
-              )}
-            </ChartCard>
-          </div>
+        <div className="chart-large">
+          <ChartCard title="Applications by category">
+            {categoryBreakdownData.length === 0 ? (
+              <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                Not enough category data yet
+              </div>
+            ) : (
+              <StackedBarChartComponent data={categoryBreakdownData} />
+            )}
+          </ChartCard>
         </div>
 
       </div>

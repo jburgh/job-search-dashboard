@@ -15,7 +15,7 @@ const PieChartComponent = ({ data }) => {
       chartRef.current.destroy();
     }
 
-    const colors = ['#6b8aff', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+    const colors = ['#8b5cf6', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6'];
 
     const ctx = canvasRef.current.getContext('2d');
     chartRef.current = new Chart(ctx, {

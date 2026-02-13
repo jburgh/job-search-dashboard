@@ -24,7 +24,7 @@ const FunnelChartComponent = ({ data }) => {
     containerRef.current.innerHTML = '';
 
     // Colors matching dashboard theme
-    const colors = ['#6b8aff', '#8b5cf6', '#f59e0b', '#10b981', '#34d399'];
+    const colors = ['#6b8aff', '#8b5cf6', '#f59e0b', '#10b981', '#ef4444'];
 
     // Create funnel container
     const funnel = document.createElement('div');
