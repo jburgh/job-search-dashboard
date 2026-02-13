@@ -36,6 +36,7 @@ function Companies({
   const [showHidden, setShowHidden] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [categorySearchTerm, setCategorySearchTerm] = useState('');
   const [appliedFilter, setAppliedFilter] = useState('all');
   const [showAppliedDropdown, setShowAppliedDropdown] = useState(false);
   const [selectedFitLevels, setSelectedFitLevels] = useState([]);
@@ -62,8 +63,17 @@ function Companies({
     return <div className="empty-state"><h3>Error loading companies</h3></div>;
   }
 
-  // Get all unique categories from companies object
-  const allCategories = Object.keys(companies).sort();
+  // Get all unique categories from companies object, with None first
+  const allCategories = Object.keys(companies).sort((a, b) => {
+    if (a === 'None') return -1;
+    if (b === 'None') return 1;
+    return a.localeCompare(b);
+  });
+
+  // Filter categories by search term
+  const filteredCategories = allCategories.filter(cat =>
+    cat.toLowerCase().includes(categorySearchTerm.toLowerCase())
+  );
 
   // Get all unique companies across categories
   const allUniqueCompanies = Object.values(companies)
@@ -263,6 +273,7 @@ function Companies({
     const handleClickOutside = (event) => {
       if (showCategoryDropdown && !event.target.closest('.filter-select') && !event.target.closest('[data-dropdown="category"]')) {
         setShowCategoryDropdown(false);
+        setCategorySearchTerm('');
       }
       if (showAppliedDropdown && !event.target.closest('.filter-select') && !event.target.closest('[data-dropdown="applied"]')) {
         setShowAppliedDropdown(false);
@@ -570,7 +581,27 @@ function Companies({
                     ⚙️
                   </button>
                 </div>
-                {allCategories.map(category => (
+                <input
+                  type="text"
+                  placeholder="Search categories..."
+                  value={categorySearchTerm}
+                  onChange={(e) => setCategorySearchTerm(e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginBottom: '0.5rem',
+                    background: 'var(--bg-tertiary)',
+                    border: '1px solid var(--border-primary)',
+                    borderRadius: '6px',
+                    fontSize: '0.9rem',
+                    color: 'var(--text-primary)',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
+                  onBlur={(e) => e.currentTarget.style.borderColor = 'var(--border-primary)'}
+                />
+                {filteredCategories.map(category => (
                   <label
                     key={category}
                     style={{
