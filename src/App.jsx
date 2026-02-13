@@ -535,7 +535,7 @@ function App() {
   // Export CSV
   const exportCSV = () => {
     try {
-      const headers = ['Company', 'Role', 'Status', 'Priority', 'Date Applied', 'Salary', 'Location', 'Progression', 'Close Reason', 'Notes'];
+      const headers = ['Company', 'Role', 'Status', 'Temperature', 'Date Applied', 'Salary', 'Location', 'Progression', 'Close Reason', 'Notes'];
       const csvContent = [
         headers.join(','),
         ...jobs.map(job => [

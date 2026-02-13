@@ -224,7 +224,7 @@ function JobsTable({
     { key: 'company', label: 'Company' },
     { key: 'role', label: 'Role' },
     { key: 'status', label: 'Status' },
-    { key: 'priority', label: 'Priority' },
+    { key: 'priority', label: 'Temperature' },
     { key: 'dateApplied', label: 'Date applied' },
     { key: 'salary', label: 'Salary' },
     { key: 'closeReason', label: 'Close reason' },
@@ -547,8 +547,8 @@ function JobsTable({
               >
                 <span>
                   {selectedPriorities.length === 0
-                    ? 'All priorities'
-                    : `Priority (${selectedPriorities.length})`}
+                    ? 'All temperatures'
+                    : `Temperature (${selectedPriorities.length})`}
                 </span>
                 <span style={{ fontSize: "0.7rem" }}>▼</span>
               </button>
@@ -800,7 +800,7 @@ function JobsTable({
                   )}
                   {visibleColumns.priority && (
                     <th onClick={() => requestSort('priority')} style={{ cursor: 'pointer' }}>
-                      Priority{getSortIcon('priority')}
+                      Temperature{getSortIcon('priority')}
                     </th>
                   )}
                   {visibleColumns.dateApplied && (
@@ -1209,7 +1209,7 @@ function JobsTable({
                       <input type="text" value={viewModalJob.progression || ''} readOnly style={viewFieldStyle} />
                     </div>
                     <div className="form-group">
-                      <label>Priority</label>
+                      <label>Temperature</label>
                       <input type="text" value={viewModalJob.priority || ''} readOnly style={viewFieldStyle} />
                     </div>
                   </div>

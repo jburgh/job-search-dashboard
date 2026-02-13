@@ -184,7 +184,7 @@ function JobModal({ job, prefillCompany, onSave, onClose, disableAnimation = fal
                 </div>
               )}
               <div className="form-group">
-                <label>Priority</label>
+                <label>Temperature</label>
                 <select
                   value={getPriorityLabel(formData.priority)}
                   onChange={(e) => setFormData({ ...formData, priority: getPriorityTier(e.target.value) })}

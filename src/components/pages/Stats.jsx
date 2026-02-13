@@ -46,12 +46,12 @@ function Stats({ jobs }) {
         </table>
       </div>
 
-      <h2 style={{ marginBottom: "1rem", color: "#6b8aff" }}>Priority Breakdown</h2>
+      <h2 style={{ marginBottom: "1rem", color: "#6b8aff" }}>Temperature Breakdown</h2>
       <div className="table-container">
         <table className="table">
           <thead>
             <tr>
-              <th>Priority</th>
+              <th>Temperature</th>
               <th>Count</th>
               <th>Percentage</th>
             </tr>

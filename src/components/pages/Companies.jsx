@@ -1242,10 +1242,10 @@ function Companies({
               <button className="modal-close" onClick={() => setShowCategoryManager(false)}>×</button>
             </div>
             <div className="modal-body" style={{ maxHeight: "60vh", overflowY: "auto" }}>
-              <p className="form-hint" style={{ marginBottom: "1.25rem" }}>Categories help you sort your target companies into groups that you can filter.</p>
               {/* Add new category */}
               <div style={{ marginBottom: "2rem", padding: "1rem", background: "var(--bg-elevated)", borderRadius: "10px" }}>
-                <h3 style={{ marginBottom: "1rem", fontSize: "0.95rem", fontWeight: "600" }}>Add new category</h3>
+                <h3 style={{ marginBottom: "0.5rem", fontSize: "0.95rem", fontWeight: "600" }}>Add new category</h3>
+                <p className="form-hint" style={{ marginBottom: "1rem" }}>Categories group your target companies so you can filter and compare response rates. Use short labels like an industry, team function, or company type (e.g. "Fintech", "Developer Tools", "Series A").</p>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <input
                     type="text"
