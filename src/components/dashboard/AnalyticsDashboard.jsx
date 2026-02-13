@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { STATUSES } from '../../constants/jobStatuses';
+import { APP_CONFIG } from '../../constants/appConfig';
 import { analytics } from '../../utils/analytics';
 import {
   ChartCard,
+  BarChartComponent,
   TripleLineChartComponent,
   FunnelChartComponent,
   PieChartComponent
@@ -13,7 +15,7 @@ import KeyMetricsGrid from './KeyMetricsGrid';
 /**
  * Main Analytics Dashboard Component
  */
-const AnalyticsDashboard = ({ jobs }) => {
+const AnalyticsDashboard = ({ jobs, companies }) => {
   const [timeRange, setTimeRange] = useState('all');
 
   // Calculate date range boundaries
@@ -104,6 +106,24 @@ const AnalyticsDashboard = ({ jobs }) => {
     }));
 
   const progressionChartData = analytics.getProgressionBreakdownForResponded(filteredJobs);
+
+  const categoryTrends = useMemo(() => {
+    return analytics.getCategoryTrends(
+      filteredJobs,
+      companies,
+      1
+    );
+  }, [filteredJobs, companies]);
+
+  const callbackRateByCategory = [...categoryTrends]
+    .filter(entry => entry.responded > 0)
+    .sort((a, b) => b.responded - a.responded)
+    .map(entry => ({ label: entry.category, value: entry.responded }));
+
+  const interviewRateByCategory = [...categoryTrends]
+    .filter(entry => entry.interviewed > 0)
+    .sort((a, b) => b.interviewed - a.interviewed)
+    .map(entry => ({ label: entry.category, value: entry.interviewed }));
 
   // Combine monthly applications and response activity into a single dataset
   const appsByMonth = {};
@@ -289,6 +309,33 @@ const AnalyticsDashboard = ({ jobs }) => {
             </div>
           </div>
         </div>
+
+        <div className="chart-row">
+          <div className="chart-medium">
+            <ChartCard title="Callbacks by category (beyond Application stage)">
+              {callbackRateByCategory.length === 0 ? (
+                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  Not enough category data yet
+                </div>
+              ) : (
+                <BarChartComponent data={callbackRateByCategory} color="#10b981" />
+              )}
+            </ChartCard>
+          </div>
+
+          <div className="chart-medium">
+            <ChartCard title="Interviews by category (beyond Recruiter Screen)">
+              {interviewRateByCategory.length === 0 ? (
+                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  Not enough category data yet
+                </div>
+              ) : (
+                <BarChartComponent data={interviewRateByCategory} color="#6b8aff" />
+              )}
+            </ChartCard>
+          </div>
+        </div>
+
       </div>
 
     </div>

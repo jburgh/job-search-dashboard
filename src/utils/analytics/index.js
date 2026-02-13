@@ -32,7 +32,8 @@ import {
   getApplicationsByCompany,
   getSuccessRateByPriority,
   getMostResponsiveCompanies,
-  getProgressionBreakdownForResponded
+  getProgressionBreakdownForResponded,
+  getCategoryTrends
 } from './companyAnalytics';
 
 /**
@@ -122,5 +123,6 @@ export const analytics = {
   },
 
   getProgressionBreakdownForResponded,
-  getMostResponsiveCompanies
+  getMostResponsiveCompanies,
+  getCategoryTrends
 };

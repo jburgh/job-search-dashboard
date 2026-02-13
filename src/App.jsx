@@ -5,6 +5,7 @@ import { PROGRESSION_STAGES } from './constants/progressionStages';
 import { StorageUtil } from './utils/storage';
 import { SecurityUtil } from './utils/security';
 import { PerformanceUtil } from './utils/performance';
+import { checkAndRepairData } from './utils/dataRepair';
 import { useUpdateChecker } from './hooks/useUpdateChecker';
 import { Header, Footer } from './components/layout';
 import { UpdateBanner } from './components/common';
@@ -254,24 +255,35 @@ function App() {
   useEffect(() => {
     try {
       const savedJobs = StorageUtil.get(APP_CONFIG.STORAGE_KEYS.JOBS, []);
+      let validJobs = [];
       if (Array.isArray(savedJobs) && savedJobs.length > 0) {
-        const validJobs = savedJobs.filter(job => {
+        validJobs = savedJobs.filter(job => {
           try {
             return SecurityUtil.validateJobData(job);
           } catch {
             return false;
           }
         });
-        setJobs(validJobs);
       }
 
       const savedCompanies = StorageUtil.get(APP_CONFIG.STORAGE_KEYS.CUSTOM_COMPANIES, {});
+      let normalizedCompanies = {};
       if (savedCompanies) {
         const normalizedSource = normalizeCompanySource(savedCompanies);
         if (normalizedSource && (typeof normalizedSource === 'object' || Array.isArray(normalizedSource))) {
-          setCustomCompanies(normalizeCompanyCollections(normalizedSource));
+          normalizedCompanies = normalizeCompanyCollections(normalizedSource);
         }
       }
+
+      // Check for and repair orphaned applications
+      const repair = checkAndRepairData(validJobs, normalizedCompanies);
+      if (repair.repaired) {
+        console.info(`Data repair: Created ${repair.companiesCreated} missing company entries`);
+        normalizedCompanies = repair.updatedCompanies;
+      }
+
+      setJobs(validJobs);
+      setCustomCompanies(normalizedCompanies);
 
       const savedBlocked = StorageUtil.get(APP_CONFIG.STORAGE_KEYS.BLOCKED_COMPANIES, []);
       setBlockedCompanies(normalizeBlockedCompanies(savedBlocked));
@@ -954,7 +966,9 @@ function App() {
       />
 
       <main className="main">
-        {view === "dashboard" && <AnalyticsDashboard jobs={jobs} />}
+        {view === "dashboard" && (
+          <AnalyticsDashboard jobs={jobs} companies={customCompanies} />
+        )}
 
         {view === "companies" && (
           <Companies

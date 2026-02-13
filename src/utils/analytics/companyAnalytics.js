@@ -163,3 +163,102 @@ export const getProgressionBreakdownForResponded = (jobs) => {
       value: count
     }));
 };
+
+const getMedian = (values) => {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  if (sorted.length % 2 === 0) {
+    return (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+  return sorted[mid];
+};
+
+const buildCompanyCategoryMap = (companies) => {
+  const map = new Map();
+  if (!companies || typeof companies !== 'object') return map;
+
+  Object.entries(companies).forEach(([category, list]) => {
+    if (!Array.isArray(list)) return;
+    list.forEach(company => {
+      const name = typeof company?.name === 'string' ? company.name.trim().toLowerCase() : '';
+      if (name && !map.has(name)) {
+        map.set(name, category || 'None');
+      }
+    });
+  });
+
+  return map;
+};
+
+/**
+ * Aggregate application statistics by company category
+ */
+export const getCategoryTrends = (
+  jobs,
+  companies,
+  minApplications = APP_CONFIG.MIN_APPLICATIONS_FOR_COMPANY_STATS
+) => {
+  const categoryMap = buildCompanyCategoryMap(companies);
+  const categoryData = {};
+
+  const interviewStages = [
+    PROGRESSION_STAGES.PARTIAL_LOOP,
+    PROGRESSION_STAGES.FULL_LOOP,
+    PROGRESSION_STAGES.OFFER
+  ];
+
+  jobs.forEach(job => {
+    const companyKey = typeof job.company === 'string' ? job.company.trim().toLowerCase() : '';
+    const category = categoryMap.get(companyKey);
+
+    // Only count jobs whose companies are explicitly in the companies list
+    if (!category) {
+      return;
+    }
+
+    if (!categoryData[category]) {
+      categoryData[category] = {
+        category,
+        total: 0,
+        responded: 0,
+        interviewed: 0,
+        closed: 0,
+        closeDays: []
+      };
+    }
+
+    const entry = categoryData[category];
+    entry.total++;
+
+    const progression = job.progression || PROGRESSION_STAGES.APPLICATION;
+    if (progression !== PROGRESSION_STAGES.APPLICATION) {
+      entry.responded++;
+    }
+
+    if (progression && interviewStages.includes(progression)) {
+      entry.interviewed++;
+    }
+
+    if (job.status === JOB_STATUSES.CLOSED) {
+      entry.closed++;
+      if (job.dateApplied && job.followUp) {
+        const start = new Date(job.dateApplied);
+        const end = new Date(job.followUp);
+        if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+          const days = Math.floor((end - start) / APP_CONFIG.MS_PER_DAY);
+          if (days >= 0) entry.closeDays.push(days);
+        }
+      }
+    }
+  });
+
+  return Object.values(categoryData)
+    .filter(entry => entry.total >= minApplications)
+    .map(entry => ({
+      ...entry,
+      responseRate: entry.total > 0 ? Math.round((entry.responded / entry.total) * 100) : 0,
+      interviewRate: entry.total > 0 ? Math.round((entry.interviewed / entry.total) * 100) : 0,
+      medianDaysToClose: getMedian(entry.closeDays)
+    }));
+};
