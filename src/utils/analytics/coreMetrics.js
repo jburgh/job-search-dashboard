@@ -185,6 +185,7 @@ export const getClosureReasons = (jobs) => {
     [CLOSE_REASONS.GHOSTED]: 0,
     [CLOSE_REASONS.DECLINED_OFFER]: 0,
     [CLOSE_REASONS.WITHDREW]: 0,
+    [CLOSE_REASONS.ACCEPTED_OFFER]: 0,
     "Unknown": 0
   };
 

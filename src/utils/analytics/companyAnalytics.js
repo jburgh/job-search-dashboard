@@ -158,6 +158,7 @@ export const getProgressionBreakdownForResponded = (jobs) => {
 
   return Object.entries(byProgression)
     .filter(([_, count]) => count > 0)
+    .sort(([, a], [, b]) => b - a)
     .map(([stage, count]) => ({
       label: stage,
       value: count

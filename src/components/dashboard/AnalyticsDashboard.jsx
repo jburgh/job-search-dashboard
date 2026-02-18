@@ -100,6 +100,7 @@ const AnalyticsDashboard = ({ jobs, companies }) => {
 
   const closureChartData = Object.entries(overview.closureReasons.counts)
     .filter(([_, count]) => count > 0)
+    .sort(([, a], [, b]) => b - a)
     .map(([reason, count]) => ({
       label: reason,
       value: count

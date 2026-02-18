@@ -153,6 +153,12 @@ function JobsTable({
     setCurrentPage(1);
   }, [filters.search, selectedStatuses.length, selectedProgressionStages.length, selectedPriorities.length, dateRangeFilter]);
 
+  // Wrap requestSort to also reset to page 1
+  const handleSort = (key) => {
+    requestSort(key);
+    setCurrentPage(1);
+  };
+
   const clearFilters = () => {
     setFilters({ status: 'all', priority: 'all', company: '', search: '' });
     setSelectedStatuses([]);
@@ -784,47 +790,47 @@ function JobsTable({
               <thead>
                 <tr>
                   {visibleColumns.company && (
-                    <th onClick={() => requestSort('company')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('company')} style={{ cursor: 'pointer' }}>
                       Company{getSortIcon('company')}
                     </th>
                   )}
                   {visibleColumns.role && (
-                    <th onClick={() => requestSort('role')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('role')} style={{ cursor: 'pointer' }}>
                       Role{getSortIcon('role')}
                     </th>
                   )}
                   {visibleColumns.status && (
-                    <th onClick={() => requestSort('status')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('status')} style={{ cursor: 'pointer' }}>
                       Status{getSortIcon('status')}
                     </th>
                   )}
                   {visibleColumns.priority && (
-                    <th onClick={() => requestSort('priority')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('priority')} style={{ cursor: 'pointer' }}>
                       Temperature{getSortIcon('priority')}
                     </th>
                   )}
                   {visibleColumns.dateApplied && (
-                    <th onClick={() => requestSort('dateApplied')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('dateApplied')} style={{ cursor: 'pointer' }}>
                       Date applied{getSortIcon('dateApplied')}
                     </th>
                   )}
                   {visibleColumns.salary && (
-                    <th onClick={() => requestSort('salary')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('salary')} style={{ cursor: 'pointer' }}>
                       Salary{getSortIcon('salary')}
                     </th>
                   )}
                   {visibleColumns.closeReason && (
-                    <th onClick={() => requestSort('closeReason')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('closeReason')} style={{ cursor: 'pointer' }}>
                       Close reason{getSortIcon('closeReason')}
                     </th>
                   )}
                   {visibleColumns.progression && (
-                    <th onClick={() => requestSort('progression')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('progression')} style={{ cursor: 'pointer' }}>
                       Progression{getSortIcon('progression')}
                     </th>
                   )}
                   {visibleColumns.followUp && (
-                    <th onClick={() => requestSort('followUp')} style={{ cursor: 'pointer' }}>
+                    <th onClick={() => handleSort('followUp')} style={{ cursor: 'pointer' }}>
                       Close date{getSortIcon('followUp')}
                     </th>
                   )}
