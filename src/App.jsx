@@ -293,7 +293,7 @@ function App() {
         setDeletedCategories(JSON.parse(savedDeleted));
       }
 
-      const savedBackupTime = localStorage.getItem(APP_CONFIG.STORAGE_KEYS.LAST_BACKUP);
+      const savedBackupTime = StorageUtil.get(APP_CONFIG.STORAGE_KEYS.LAST_BACKUP);
       if (savedBackupTime) {
         const backupDate = new Date(savedBackupTime);
         if (!isNaN(backupDate.getTime())) {
