@@ -224,6 +224,7 @@ export const getCategoryTrends = (
         total: 0,
         responded: 0,
         interviewed: 0,
+        offers: 0,
         closed: 0,
         closeDays: []
       };
@@ -239,6 +240,10 @@ export const getCategoryTrends = (
 
     if (progression && interviewStages.includes(progression)) {
       entry.interviewed++;
+    }
+
+    if (progression === PROGRESSION_STAGES.OFFER) {
+      entry.offers++;
     }
 
     if (job.status === JOB_STATUSES.CLOSED) {

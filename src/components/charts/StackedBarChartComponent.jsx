@@ -22,8 +22,14 @@ const StackedBarChartComponent = ({ data }) => {
         labels: data.map(d => d.label),
         datasets: [
           {
+            label: 'Offers',
+            data: data.map(d => d.offers),
+            backgroundColor: '#ef4444',
+            borderRadius: 6
+          },
+          {
             label: 'Interviews',
-            data: data.map(d => d.interviews),
+            data: data.map(d => Math.max(0, d.interviews - d.offers)),
             backgroundColor: '#f59e0b',
             borderRadius: 6
           },
@@ -71,12 +77,22 @@ const StackedBarChartComponent = ({ data }) => {
               const ds = item.dataset;
               const color = ds.backgroundColor;
               let html = `<div style="margin-bottom:2px;font-weight:600">${entry.label}</div>`;
-              html += `<div><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${color};margin-right:6px"></span>`;
+              const swatch = `<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${color};margin-right:6px"></span>`;
               if (ds.label === 'Callbacks') {
-                html += `Callbacks: ${entry.callbacks}</div>`;
-                html += `<div style="font-style:italic;color:#9ca3af;padding-left:16px">includes ${entry.interviews} interview${entry.interviews !== 1 ? 's' : ''}</div>`;
+                html += `<div>${swatch}Callbacks: ${entry.callbacks}</div>`;
+                const details = [];
+                if (entry.interviews > 0) details.push(`${entry.interviews} interview${entry.interviews !== 1 ? 's' : ''}`);
+                if (entry.offers > 0) details.push(`${entry.offers} offer${entry.offers !== 1 ? 's' : ''}`);
+                if (details.length > 0) {
+                  html += `<div style="font-style:italic;color:#9ca3af;padding-left:16px">includes ${details.join(', ')}</div>`;
+                }
+              } else if (ds.label === 'Interviews') {
+                html += `<div>${swatch}Interviews: ${entry.interviews}</div>`;
+                if (entry.offers > 0) {
+                  html += `<div style="font-style:italic;color:#9ca3af;padding-left:16px">includes ${entry.offers} offer${entry.offers !== 1 ? 's' : ''}</div>`;
+                }
               } else {
-                html += `${ds.label}: ${item.raw}</div>`;
+                html += `<div>${swatch}${ds.label}: ${item.raw}</div>`;
               }
               el.innerHTML = html;
               el.style.opacity = '1';

@@ -123,7 +123,8 @@ const AnalyticsDashboard = ({ jobs, companies }) => {
       label: entry.category,
       applications: entry.total,
       callbacks: entry.responded,
-      interviews: entry.interviewed
+      interviews: entry.interviewed,
+      offers: entry.offers
     }));
 
   // Combine monthly applications and response activity into a single dataset
