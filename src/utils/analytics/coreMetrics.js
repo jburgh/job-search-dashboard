@@ -180,19 +180,16 @@ export const getPipelineStatus = (jobs) => {
 export const getClosureReasons = (jobs) => {
   const closed = jobs.filter(job => job.status === JOB_STATUSES.CLOSED);
 
-  const counts = {
-    [CLOSE_REASONS.REJECTED]: 0,
-    [CLOSE_REASONS.GHOSTED]: 0,
-    [CLOSE_REASONS.DECLINED_OFFER]: 0,
-    [CLOSE_REASONS.WITHDREW]: 0,
-    [CLOSE_REASONS.ACCEPTED_OFFER]: 0,
-    "Unknown": 0
-  };
+  // Build counts from configured reasons so chart categories stay in sync with constants.
+  const counts = Array.from(new Set(Object.values(CLOSE_REASONS))).reduce((acc, reason) => {
+    acc[reason] = 0;
+    return acc;
+  }, { Unknown: 0 });
 
   closed.forEach(job => {
-    const reason = job.closeReason || "Unknown";
-    if (counts.hasOwnProperty(reason)) counts[reason]++;
-    else counts["Unknown"]++;
+    const reason = job.closeReason;
+    if (reason && Object.prototype.hasOwnProperty.call(counts, reason)) counts[reason]++;
+    else counts.Unknown++;
   });
 
   return { total: closed.length, counts };
